@@ -3,8 +3,8 @@
 class FrontControleur{
 
     public function __construct(){
-        $liste_actions_utilisateur = array('deconnecter','crerListePrivee','supprListeprivee');
-        $liste_actions_visiteur = array('ajoutListe','suprrListe','connecter');
+        $liste_actions_utilisateur = array('deconnection','crerListePv','desinscription','changerInfos');
+        $liste_actions_visiteur = array('creerListe','suprrListe','connection','inscription','creerTache','cocherTache','supprTache');
         global $rep,$vues;
         require($rep.$vues['acceuil']);
         try{

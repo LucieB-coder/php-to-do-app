@@ -5,6 +5,7 @@ Class Tache {
     private string $intitule;
     private boolean $isCompleted;
     private string $description;
+    private int $idListe;
 
     function __construct(int $i, string $in, boolean $is, string $desc){
         $this->id = $i;
@@ -27,6 +28,10 @@ Class Tache {
 
     function get_description(): string {
         return $this->description;
+    }
+
+    function get_idListe(): string {
+        return $this->idListe;
     }
 }
 

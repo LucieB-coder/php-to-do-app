@@ -7,10 +7,7 @@ class VisitorModel{
         $co = new Connection();
         $this->gw = new ListeGateway($co);
     }
-
-    public function creerListe(){
-        
-    }
+    
 }
 
 ?>

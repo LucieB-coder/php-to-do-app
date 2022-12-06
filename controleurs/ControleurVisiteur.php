@@ -29,7 +29,7 @@ class VisitorController {
             }
         }catch(PDOException $e){
                 $dataView[]="Erreur inatendue";
-                require(__DIR__.'/../vues/erreur.php');
+                require($rep.$vues['erreur']);
         }
     }
 

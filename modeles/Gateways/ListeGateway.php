@@ -91,6 +91,40 @@ class ListeGateway {
             }
         }
     }
+
+    public function creerListe(string $nom, int $idCreator){
+            try{
+                $co = $this->co;
+
+                $insertQuery = "INSERT INTO Liste VALUES (NULL, :nom, :idCreator)";
+
+
+                $co->executeQuery($query, array('id' => array($id, PDO::PARAM_INT), 
+                                                'nom' => array($nom, PDO::PARAM_STR), 
+                                                'idCreator' => array($idCreator, PDO::PARAM_INT)));
+            }
+            catch(PDOException $Exception){
+                echo 'erreur';
+                echo $Exception->getMessage();
+            }
+        }
+    }
+
+    public function delListe(int $id){
+        if(!empty($id)){
+            try{
+                $co = $this->co;
+
+                $query = "DELETE FROM Tache WHERE id=:id";
+
+                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
+            }
+            catch(PDOException $Exception){
+                echo 'erreur';
+                echo $Exception->getMessage();
+            }
+        }
+    }
 }
 
 ?>

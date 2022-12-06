@@ -3,7 +3,7 @@
 class Liste {
     private int $id;
     private string $nom;
-    private $taches;
+    private int $idCreator;
 
     function __construct(int $i, string $n, $t){
         $this->id=$i;
@@ -19,7 +19,7 @@ class Liste {
         return $this->nom;
     }
 
-    function get_taches(): array {
+    function get_idCreator(): array {
         return $this->taches;
     }
 }
