@@ -17,10 +17,10 @@ class VisitorController {
                 case "connection":
                     $this->connection($arrayErrorViews);
                     break;
-                case "creerListe":
+                case "creerListePublique":
                     $this->creerListe($arrayErrorViews);
                     break;
-                case "supprListe":
+                case "supprListePublique":
                     $this->supprListe($arrayErrorViews);
                     break;
                 default :
@@ -41,6 +41,7 @@ class VisitorController {
     public function connection(array $vues_erreur){
         global $rep,$vues;
         require($rep.$vues['connection']);
+
     }
 }
 

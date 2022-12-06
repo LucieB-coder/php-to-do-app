@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends VisitorController{
+class UserController{
     
     public function __construct() {
         global $rep,$vues;
@@ -10,20 +10,20 @@ class UserController extends VisitorController{
 
         try{
             $action = $_REQUEST['action']??null;
-            /*
             switch($action){
                 case NULL:
-                    $this->Reinit();
+                    $this->reinit();
                     break;
                 case "deconnection":
                     $this->deconnection($arrayErrorViews);
                     break;
-                case "creerListe":
+                case "creerListePrivee":
                     $this->creerListe($arrayErrorViews);
                     break;
                 case "supprListe":
                     $this->supprListe($arrayErrorViews);
                     break;
+                case "cocherTache":
                 default :
                     $arrayErrorViews[]="Erreur innatendue !!!";
                     require($rep.$vues['error']);
@@ -33,7 +33,7 @@ class UserController extends VisitorController{
                 $dataView[]="Erreur inatendue";
                 require(__DIR__.'/../vues/erreur.php');
         }
-    }   
+    } 
 }
 
 ?>
