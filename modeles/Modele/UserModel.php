@@ -23,6 +23,10 @@ class UserModel{
     public function desinscription($login){
         $this->usergw->delUtilisateur($login);
     }
+
+    public function changerPassword($newPassword){
+        $this->usergw->putPassword($newPassword);
+    }
 }
 
 ?>
