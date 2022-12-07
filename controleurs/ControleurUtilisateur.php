@@ -8,34 +8,30 @@ class UserController{
         session_sart();
         $arrayErrorViews= array();
 
-        try{
-            $action = $_REQUEST['action']??null;
-            switch($action){
-                case "deconnection":
-                    $this->deconnection($arrayErrorViews);
-                    break;
-                case "creerListePv":
-                    $this->creerListe($arrayErrorViews);
-                    break;
-                case "desinscription":
-                    $this->desinctription($arrayErrorViews);
-                    break;
-                case "changerInfos":
-                    $this->changerInfos($arrayErrorViews);
-                    break;
-                default :
-                    $arrayErrorViews[]="Erreur innatendue !!!";
-                    require($rep.$vues['error']);
-            }
-        }catch(PDOException $e){
-                $dataView[]="Erreur inatendue";
-                require($rep.$vues['erreur']);
+        $action = $_REQUEST['action']??null;
+        switch($action){
+            case "deconnection":
+                $this->deconnection($arrayErrorViews);
+                break;
+            case "creerListePv":
+                $this->creerListe($arrayErrorViews);
+                break;
+            case "desinscription":
+                $this->desinctription($arrayErrorViews);
+                break;
+            case "changerInfos":
+                $this->changerPassword($arrayErrorViews);
+                break;
+            default :
+                $arrayErrorViews[]="Erreur innatendue !!!";
+                require($rep.$vues['error']);
         }
     } 
 
     public function deconnection($arrayErrorViews){
         // appeler la méthode deco du modèle
-        UserModel::deconnection();
+        $retour = UserModel::deconnection();
+        require($rep.$vues['acceuil']);
     }
 
     public function creerListePv($arrayErrorViews){
@@ -50,22 +46,35 @@ class UserController{
         //Validation::clear_string($_POST['ListName']);
         // appelle à la methode du modèle
         if($privee == true){
-            UserModel::creerListePv($nomListe,$_SESSION['login']);
+            try{
+                UserModel::creerListePv($nomListe,$_SESSION['login']);
+            } catch (PDOException $e){
+                $dataView[]="Erreur inatendue";
+                require($rep.$vues['erreur']);
+            }
         }else{
-            VisitorModel::creerListe($nomListe);
+            try{
+                VisitorModel::creerListe($nomListe);
+            } catch (PDOException $e){
+                $dataView[]="Erreur inatendue";
+                require($rep.$vues['erreur']);
+            }
         }
     }
 
-    public function desinscription($arrayErrorViews){
+    public function changerPassword($arrayErrorViews){
         global $rep, $vues;
-        // recup valeurs des champs
-        $password=$_POST['password'];
-        // valider les champs
-        Validation::val_desinscription($password);
-        // vider les champs
-        //Validation::clear_string($_POST['password']);
-        // appel à la classe userModel
-        UserModel::desinscription($_SESSION['login']);
+        $password1=$_POST['password1'];
+        $passwordConfirm=$_POST['passwordConfirm'];
+        $newPassword=Validation::val_changer_password($password1,$passwordConfirm);
+
+        try{
+            UserModel::changerPassword($newPassword);
+            require($rep.$vues['profil'])
+        }catch(PDOException $e){
+            $dataView[]="Erreur inatendue";
+            require($rep.$vues['erreur']);
+        }
     }
 }
 
