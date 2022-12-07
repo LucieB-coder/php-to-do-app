@@ -43,6 +43,18 @@
         public function creerTache(string $intitule){
             $this->get_gtwListe()->creerTache($intitule);
         }
+
+        public function cocherTache($id){
+            $this->get_gtwListe()->completeTache($id);
+        }
+
+        public function decocherTache($id){
+            $this->get_gtwListe()->decocherTache($id);
+        }
+
+        public function supprTache($id){
+            $this->get_gtwListe()->delTache($id);
+        }
     }
 
 ?>

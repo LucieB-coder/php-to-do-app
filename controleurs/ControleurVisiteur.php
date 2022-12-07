@@ -17,6 +17,7 @@ class VisitorController {
                     break;
                 case "inscription":
                     $this->inscription($arrayErrorViews);
+                    break;
                 case "creerListe":
                     $this->creerListe($arrayErrorViews);
                     break;
@@ -29,6 +30,9 @@ class VisitorController {
                 case "cocherTache":
                     $this->cocherTache($arrayErrorViews);
                     break;
+                case "decocherTache":
+                    $this->decocherTache($arrayErrorViews);
+                    break;
                 case "supprTache":
                     $this->supprTache($arrayErrorViews);
                 default :
@@ -37,14 +41,14 @@ class VisitorController {
             }
         } catch(PDOException $e){
                 $dataView[]="Erreur inatendue";
-                require(__DIR__.'/../vues/erreur.php');
+                require('erreur.php');
         } 
         exit(0);
     }
 
     public function reinit(){
         global $rep,$vues;
-        require($rep.$vues['acceuil']);
+        require($rep.$vues['acceuil.php']);
     }
 
     public function connection(array $vues_erreur){
@@ -55,7 +59,7 @@ class VisitorController {
         Validation::clear_string($pwd);
         Validation::val_connexion($usrname,$pwd,$vues_erreur);
 
-        $model = new UserModel();
+        $model = new VisiteurModel();
         $worked=$model->connexion();
         /*
         $dVue = array (
@@ -71,12 +75,13 @@ class VisitorController {
 
     public function inscription(array $vues_erreur){
         global $rep,$vues;
+        require($rep.$vues['inscription']);
         
         $usrname=$_POST['login']; 
         $pwd=$_POST['mdp'];
         Validation::val_connexion($usrname,$pwd,$vues_erreur);
 
-        $model = new UserModel();
+        $model = new VisiteurModel();
         $model->inscription();
     }
 
@@ -86,7 +91,7 @@ class VisitorController {
 
         $nom=$_POST['nom'];
         
-        $model = new ListeModel();
+        $model = new VisiteurModel();
         $model->creerListe($nom);
     }
 
@@ -94,7 +99,7 @@ class VisitorController {
         global $rep, $vues;
         require($rep.$vues['suppressionListe']);
 
-        $model = new ListeModel();
+        $model = new VisiteurModel();
         $model->supprListe();        
     }
 
@@ -104,8 +109,38 @@ class VisitorController {
 
         $intitule = $_POST['intitule'];
 
-        $model = new ListeModel();
+        $model = new VisiteurModel();
         $model->creerTache();
+    }
+
+    public function cocherTache(array $vues_erreur){
+        global $rep, $vues;
+        require($rep.$vues['liste']);
+
+        $id = $_POST['idTache'];
+
+        $model = new VisiteurModel();
+        $model->cocherTache($id);
+    }
+
+    public function decocherTache(array $vues_erreur){
+        global $rep, $vues;
+        require($rep.$vues['liste']);
+
+        $id = $_POST['idTache'];
+
+        $model = new VisiteurModel();
+        $model->decocherTache($id);
+    }
+
+    public function supprTache(array $vues_erreur){
+        global $rep, $vues;
+        require($rep.$vues['liste']);
+
+        $id = $_POST['idTache'];
+
+        $model = new VisiteurModel();
+        $model->supprTache($id);
     }
 }
 
