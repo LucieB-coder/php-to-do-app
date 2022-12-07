@@ -10,14 +10,14 @@ class UserGateway {
         $this->co = $co; 
     } 
 
-    public function creerUtilisateur(int $id, string $nom, string $pwd){
+    public function creerUtilisateur(string $nom, string $pwd){
         if(!empty($id) && !empty($nom) && empty($password)){
             try{
                 $co = $this->co;
 
-                $query = "INSERT INTO Utilisateur VALUES (:id, :nom, :pwd)";
+                $query = "INSERT INTO Utilisateur VALUES (NULL, :nom, :pwd)";
 
-                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR), ':nom' => array($nom, PDO::PARAM_STR), ':pwd' => array($pwd, PDO::PARAM_STR)));
+                $co->executeQuery($query, array(':nom' => array($nom, PDO::PARAM_STR), ':pwd' => array($pwd, PDO::PARAM_STR)));
             }
             catch(PDOException $Excception){
                 echo 'erreur';
@@ -113,38 +113,6 @@ class UserGateway {
             }
         }
         return $usr;
-    }
-
-    public function creerListe(int $id, string $nom){
-        if(!empty($id) && !empty($nom)){
-            try{
-                $co = $this->co;
-
-                $query = "INSERT INTO Liste VALUES (:id, :nom, :taches)";
-
-                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR), ':nom' => array($nom, PDO::PARAM_STR), ':taches' => array($taches, PDO::PARAM_STR)));
-            }
-            catch(PDOException $Exception){
-                echo 'erreur';
-                echo $Exception->getMessage();
-            }
-        }
-    }
-
-    public function delListe(int $id){
-        if(!empty($id)){
-            try{
-                $co = $this->co;
-
-                $query = "DELETE FROM Tache WHERE id=:id";
-
-                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
-            }
-            catch(PDOException $Exception){
-                echo 'erreur';
-                echo $Exception->getMessage();
-            }
-        }
     }
 
 }

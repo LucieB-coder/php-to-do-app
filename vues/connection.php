@@ -10,9 +10,9 @@
         </header>
         <div>
             <h4>Username</h4>
-            <input type="text"/>
+            <input type="text" name="login"/>
             <h4>Password</h4>
-            <input type="password"/>
+            <input type="password" name="mdp"/>
             <br/>
             <br/>
             <input class="button" type="button" value="Log In"/>

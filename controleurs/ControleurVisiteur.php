@@ -17,20 +17,35 @@ class VisitorController {
                 case "connection":
                     $this->connection($arrayErrorViews);
                     break;
+                case "inscription":
+                    $this->inscription($arrayErrorViews);
                 case "creerListe":
                     $this->creerListe($arrayErrorViews);
                     break;
                 case "supprListe":
                     $this->supprListe($arrayErrorViews);
                     break;
+                case "creerTache":
+                    $this->creerTache($arrayErrorViews);
+                    break;
+                case "cocherTache":
+                    $this->cocherTache($arrayErrorViews);
+                    break;
+                case "supprTache":
+                    $this->supprTache($arrayErrorViews);
                 default :
                     $arrayErrorViews[]="Erreur innatendue !!!";
                     require($rep.$vues['error']);
             }
-        }catch(PDOException $e){
+        } catch(PDOException $e){
                 $dataView[]="Erreur inatendue";
                 require(__DIR__.'/../vues/erreur.php');
+        } catch (Exception $e2)
+        {
+                $dVueEreur[] = "Erreur inattendue!!! ";
+                require ($rep.$vues['erreur']);
         }
+        exit(0);
     }
 
     public function reinit(){
@@ -40,7 +55,63 @@ class VisitorController {
 
     public function connection(array $vues_erreur){
         global $rep,$vues;
-        require($rep.$vues['connection']);
+        
+        $usrname=$_POST['login']; 
+        $pwd=$_POST['mdp'];
+        Validation::clear_string($pwd);
+        Validation::val_connexion($usrname,$pwd,$vues_erreur);
+
+        $model = new UserModel();
+        $worked=$model->connexion();
+        /*
+        $dVue = array (
+            'username' => $usrname,
+            'password' => $pwd, 
+            'worked' => $worked,
+        );
+        */
+        if($worked==false){
+            require('erreur.php');
+        }
+    }
+
+    public function inscription(array $vues_erreur){
+        global $rep,$vues;
+        
+        $usrname=$_POST['login']; 
+        $pwd=$_POST['mdp'];
+        Validation::val_connexion($usrname,$pwd,$vues_erreur);
+
+        $model = new UserModel();
+        $model->inscription();
+    }
+
+    public function creerListe(array $vues_erreur){
+        global $rep, $vues;
+        require($rep.$vues['creationListe']);
+
+        $nom=$_POST['nom'];
+        
+        $model = new ListeModel();
+        $model->creerListe($nom);
+    }
+
+    public function supprListe(array $vues_erreur){
+        global $rep, $vues;
+        require($rep.$vues['suppressionListe']);
+
+        $model = new ListeModel();
+        $model->supprListe();        
+    }
+
+    public function creerTache(array $vues_erreur){
+        global $rep, $vues;
+        require($rep.$vues['creerTache']);
+
+        $intitule = $_POST['intitule'];
+
+        $model = new ListeModel();
+        $model->creerTache();
     }
 }
 

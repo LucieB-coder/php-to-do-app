@@ -12,9 +12,9 @@
         <div>
             <p>Please enter all the informations :</p>
             <h4>Username</h4>
-            <input type="text"/>
+            <input type="text" name="login"/>
             <h4>Password</h4>
-            <input type="password"/>
+            <input type="password" name="mdp"/>
             <h4>Email</h4>
             <input type="email"/>
             <h4>Date Of Birth</h4>
