@@ -19,8 +19,8 @@
             <br/>
             <br/>
             <p>You are new here?</p>
-            <a class="button" href="./signUp.html">
-                <input type="button" value="Sign Up"/>
+            <a href="inscription.php">
+                <input class="button" type="button" value="Sign Up"/>
             </a>
         </div>
     </body>

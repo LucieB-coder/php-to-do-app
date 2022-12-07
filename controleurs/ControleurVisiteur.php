@@ -40,11 +40,7 @@ class VisitorController {
         } catch(PDOException $e){
                 $dataView[]="Erreur inatendue";
                 require(__DIR__.'/../vues/erreur.php');
-        } catch (Exception $e2)
-        {
-                $dVueEreur[] = "Erreur inattendue!!! ";
-                require ($rep.$vues['erreur']);
-        }
+        } 
         exit(0);
     }
 

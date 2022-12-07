@@ -92,21 +92,22 @@ class ListeGateway {
         }
     }
 
-    public function creerListe(string $nom, string $idCreateur){
-        if(!empty($id) && !empty($nom)){
+    public function creerListe(string $nom, int $idCreator){
             try{
                 $co = $this->co;
 
-                $query = "INSERT INTO Liste VALUES (NULL, :nom)";
+                $insertQuery = "INSERT INTO Liste VALUES (NULL, :nom, :idCreator)";
 
-                $co->executeQuery($query, array(':nom' => array($nom, PDO::PARAM_STR)));
+
+                $co->executeQuery($insertQuery, array('nom' => array($nom, PDO::PARAM_STR), 
+                                                'idCreator' => array($idCreator, PDO::PARAM_INT)));
             }
             catch(PDOException $Exception){
                 echo 'erreur';
                 echo $Exception->getMessage();
             }
-        }
     }
+    
 
     public function delListe(int $id){
         if(!empty($id)){
@@ -123,7 +124,6 @@ class ListeGateway {
             }
         }
     }
-    
 }
 
 ?>
