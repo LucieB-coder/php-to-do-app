@@ -1,19 +1,23 @@
 <?php
 
+require('ControleurUtilisateur.php');
+require('ControleurVisiteur.php');
+
+
 class FrontControleur{
 
     public function __construct(){
-        $liste_actions_utilisateur = array('deconnection','crerListePv','desinscription','changerInfos');
+        //On démarre la session
+        session_start();
+        $liste_actions_utilisateur = array('deconnection','crerListePv','desinscription','changerPassword');
         $liste_actions_visiteur = array('creerListe','suprrListe','connection','inscription','creerTache','cocherTache','supprTache');
         global $rep,$vues;
-        require($rep.$vues['acceuil']);
         try{
-            $utilisateur = UserModel::IsUtilisateur(); 
-            $action = $_REQUEST['action'];
+            $action = isset($_REQUEST['action']) ? (string)$_REQUEST['action']: null;
             
             if (in_array($action,$liste_actions_utilisateur)){
-                if($utilisateur == null){
-                    new VisiteurController();
+                if( !isset($_SESSION['login'])){
+                    new VisitorController();
                 } else {
                     new UserController();
                 }

@@ -4,8 +4,6 @@ class VisitorController {
     
     public function __construct() {
         global $rep,$vues;
-        //On démarre la session
-        session_sart();
         $arrayErrorViews= array();
 
         try{
