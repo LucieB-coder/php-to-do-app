@@ -59,11 +59,9 @@ class VisitorController {
 
         $model = new UserModel();
         $worked=$model->connexion();
-        /*
+        /* Utiliser si jamais connexion n'a pas marché et qu'on veut remettre le login dans la page pour que le visiteur n'ait pas à le retaper
         $dVue = array (
             'username' => $usrname,
-            'password' => $pwd, 
-            'worked' => $worked,
         );
         */
         if($worked==false){
