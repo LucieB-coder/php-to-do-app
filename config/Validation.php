@@ -13,7 +13,7 @@
         }
 
         static function clear_string($champ){
-            // Wesh
+            // A changer filter_var
         }
     }
 

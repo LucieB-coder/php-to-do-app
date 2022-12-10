@@ -13,12 +13,12 @@ class FrontControleur{
             
             if (in_array($action,$liste_actions_utilisateur)){
                 if($utilisateur == null){
-                    new VisitorController();
+                    new VisiteurController();
                 } else {
                     new UserController();
                 }
             } else{
-                new VisitorController();
+                new VisiteurController();
             }
         } catch (Exception $e){require ($rep.$vues['erreur']);}
     }
