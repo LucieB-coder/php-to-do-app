@@ -4,7 +4,8 @@ class UserController{
     
     public function __construct() {
         global $rep,$vues;
-
+        //On démarre la session
+        session_sart();
         $arrayErrorViews= array();
 
         $action = $_REQUEST['action']??null;
@@ -69,7 +70,7 @@ class UserController{
 
         try{
             UserModel::changerPassword($newPassword);
-            require($rep.$vues['profil']);
+            require($rep.$vues['profil'])
         }catch(PDOException $e){
             $dataView[]="Erreur inatendue";
             require($rep.$vues['erreur']);

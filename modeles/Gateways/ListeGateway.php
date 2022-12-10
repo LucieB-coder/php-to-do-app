@@ -92,22 +92,6 @@ class ListeGateway {
         }
     }
 
-    public function decocherTache(int $id){
-        if(!empty($id)){
-            try{
-                $co = $this->co;
-
-                $query = "UPDATE Tache SET isCompleted=false WHERE id=:id";
-
-                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
-            }
-            catch(PDOException $Exception){
-                echo 'erreur';
-                echo $Exception->getMessage();
-            }
-        }
-    }
-
     public function creerListe(string $nom, int $idCreator){
             try{
                 $co = $this->co;
