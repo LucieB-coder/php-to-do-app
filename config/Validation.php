@@ -13,7 +13,7 @@
         }
 
         static function clear_string($champ){
-            // A changer filter_var
+            return filter_var($champ, FILTER_SANITIZE_SPECIAL_VAR);
         }
     }
 
