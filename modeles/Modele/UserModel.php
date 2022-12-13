@@ -4,28 +4,34 @@ class UserModel{
     public $listgw;
     public $usergw;
 
-    public function __construct(){
-        $co = new Connection();
+    function __construct(){
+        global $rep,$vues,$bd;
+        $co = new Connection($bd['dsn'],$bd['user'],$bd['pswd']);
         $this->usergw = new UserGateway($co);
         $this->listgw = new ListeGateway($co);
     }
 
-    public function deconnection(){
+    function deconnection(){
         session_unset();
         session_destroy();
         $_SESSION = array();
     }
 
-    public function creerListePv($nom,$idCeator){
+    function creerListePv($nom,$idCeator){
         $this->listgw->creerListe($nom,$idCreator);
     }
 
-    public function desinscription($login){
+    function desinscription($login){
         $this->usergw->delUtilisateur($login);
     }
 
-    public function changerPassword($newPassword){
+    function changerPassword($newPassword){
         $this->usergw->putPassword($newPassword);
+    }
+
+    function pullListesPrivees($nom){
+        $listes=$this->listgw->getByCreator($nom);
+        return $listes;
     }
 }
 

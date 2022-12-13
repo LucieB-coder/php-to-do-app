@@ -1,26 +1,16 @@
 <?php
 
 class Liste {
-    private int $id;
-    private string $nom;
-    private int $idCreator;
+    public int $id;
+    public string $nom;
+    public ?string $nomCreateur;
+    public ?array $taches;
 
-    function __construct(int $i, string $n, $t){
+    function __construct(int $i, string $n, ?string $nomCrea,?array $t){
         $this->id=$i;
         $this->nom=$n;
+        $this->nomCreateur=$nomCrea;
         $this->taches=$t;
-    }
-
-    function get_id(): int {
-        return $this->id;
-    }
-
-    function get_nom(): string {
-        return $this->nom;
-    }
-
-    function get_idCreator(): array {
-        return $this->taches;
     }
 }
 

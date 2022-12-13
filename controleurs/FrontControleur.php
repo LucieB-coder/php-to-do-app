@@ -1,28 +1,24 @@
 <?php
 
-require('ControleurUtilisateur.php');
-require('ControleurVisiteur.php');
-
-
 class FrontControleur{
 
     public function __construct(){
-        //On démarre la session
+        $liste_actions_utilisateur = array('accessPrivateLists','accessProfilePage','deconnection','crerListePv','desinscription','changerPassword');
+        $liste_actions_visiteur = array('accessCreationListePage','accessInscription','accessConnectionPage','creerListe','suprrListe','connection','inscription','creerTache','cocherTache','supprTache');
+        global $rep,$vues,$bd,$dataView,$styles,$assets;
         session_start();
-        $liste_actions_utilisateur = array('deconnection','crerListePv','desinscription','changerPassword');
-        $liste_actions_visiteur = array('creerListe','suprrListe','connection','inscription','creerTache','cocherTache','supprTache');
-        global $rep,$vues;
         try{
-            $action = isset($_REQUEST['action']) ? (string)$_REQUEST['action']: null;
+            $user=$_SESSION??null;
+            $action = !empty($_REQUEST['action']) ? (string)$_REQUEST['action']:null;
             
             if (in_array($action,$liste_actions_utilisateur)){
-                if( !isset($_SESSION['login'])){
-                    new VisitorController();
+                if($user == null){
+                    new ControleurVisiteur();
                 } else {
-                    new UserController();
+                    new ControleurUtilisateur();
                 }
             } else{
-                new VisiteurController();
+                new ControleurVisiteur();
             }
         } catch (Exception $e){require ($rep.$vues['erreur']);}
     }

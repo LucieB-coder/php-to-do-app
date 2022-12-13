@@ -9,19 +9,25 @@
             <h1>You are back ?!</h1>
         </header>
         <div>
-            <h4>Username</h4>
-            <input type="text" name="login"/>
-            <h4>Password</h4>
-            <input type="password" name="mdp"/>
+            <form method="POST" name="connectionForm" id="connectionForm">
+                <p>Login
+                    <input type="text" name="login" required/></p>
+                <p>Password
+                <input type="password" name="mdp" required/></p>
+                <br/>
+                <br/>
+                <input class="button" type="submit" value="Log In"/>
+                <input type="hidden" name="action" value="connection">
+            </form>
             <br/>
             <br/>
-            <input class="button" type="button" value="Log In"/>
-            <br/>
-            <br/>
-            <p>You are new here?</p>
-            <a href="inscription.php">
-                <input class="button" type="button" value="Sign Up"/>
-            </a>
+        </div>
+        <div>
+            <form method="POST" name="accessInscription" id="accesInscription">
+                <h2>You are new here?</h2>
+                <input class="button" type="submit" value="Sign Up"/>
+                <input type="hidden" name="action" value="accessInscription">
+            </form>
         </div>
     </body>
 </html>
