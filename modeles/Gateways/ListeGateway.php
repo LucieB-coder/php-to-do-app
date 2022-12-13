@@ -9,38 +9,81 @@ class ListeGateway {
         $this->co = $co; 
     } 
 
-    public function getByCreator(int $idUsr) : array {
-        $listes = null;
+    public function getPublicLists():array{
+        $listes = array();
         $taches = null;
-        if(!empty($idUsr)){
-            try {
-                $co = $this->co;
+        try {
+            $co = $this->co;
 
-                $query = "SELECT idListe FROM HasList WHERE idUser=:idUser";
+            $query = "SELECT * FROM Liste WHERE nomCreateur IS NULL";
 
-                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
+            $co->executeQuery($query, []);
 
-                $results = $co->getResults();
+            $results = $co->getResults();
 
-                Foreach($results as $row){
-                    $idListe = $row['idListe'];
-                    $queryTaches = "SELECT t.* FROM Tache t, HasTache h WHERE t.id=h.idTache AND h.idListe=:idListe";
-                    $co->executeQuery($queryTaches, array(':idListe' => array($idListe, PDO::PARAM_STR)));
-                    $resultsTaches = $co->getResults();
+            foreach($results as $row){
+                $idListe = $row['id'];
+                $queryTaches = "SELECT * FROM Tache WHERE idListe=:idListe";
+                $co->executeQuery($queryTaches, array(':idListe' => array($idListe, PDO::PARAM_INT)));
+                $resultsTaches = $co->getResults();
 
-                    Foreach($resultsTaches as $rowTaches){
-                        $taches[] = new Tache($rowTaches['id'], $rowTaches['intitule'], $rowTaches['isCompleted'], $rowTaches['description']);
+                foreach($resultsTaches as $rowTaches){
+                    if($rowTaches['complete']=="0"){
+                        $taches[] = new Tache($rowTaches['id'], $rowTaches['nom'],false,$idListe);
+                    }else{
+                        $taches[] = new Tache($rowTaches['id'], $rowTaches['nom'],true,$idListe);
                     }
-
-                    $listes[] = new Liste($row['id'], $row['nom'], $taches);
-                    $taches = null;
+                    
                 }
-            }
-            catch(PDOException $Exception) {
-                echo 'erreur';
-                echo $Exception->getMessage();
+
+                $listes[] = new Liste($row['id'], $row['nom'],null, $taches);
+                $taches = null;
             }
         }
+        catch(PDOException $Exception) {
+            echo 'erreur';
+            echo $Exception->getMessage();
+        }
+
+        return $listes;
+    }
+
+    public function getByCreator(string $usr) : array {
+        $listes = array();
+        $taches = null;
+        try {
+            $co = $this->co;
+
+            $query = "SELECT * FROM Liste WHERE nomCreateur=:nomCrea";
+
+            $co->executeQuery($query, array('nomCrea' => array($usr, PDO::PARAM_STR)));
+
+            $results = $co->getResults();
+
+            foreach($results as $row){
+                $idListe = $row['id'];
+                $queryTaches = "SELECT * FROM Tache WHERE idListe=:idListe";
+                $co->executeQuery($queryTaches, array(':idListe' => array($idListe, PDO::PARAM_INT)));
+                $resultsTaches = $co->getResults();
+
+                foreach($resultsTaches as $rowTaches){
+                    if($rowTaches['complete']=="0"){
+                        $taches[] = new Tache($rowTaches['id'], $rowTaches['nom'],false,$idListe);
+                    }else{
+                        $taches[] = new Tache($rowTaches['id'], $rowTaches['nom'],true,$idListe);
+                    }
+                    
+                }
+
+                $listes[] = new Liste($row['id'], $row['nom'],$usr, $taches);
+                $taches = null;
+            }
+        }
+        catch(PDOException $Exception) {
+            echo 'erreur';
+            echo $Exception->getMessage();
+        }
+    
         return $listes;
     }
 
@@ -92,15 +135,15 @@ class ListeGateway {
         }
     }
 
-    public function creerListe(string $nom, int $idCreator){
+    public function creerListe(string $nom, ?string $nomCreator){
             try{
                 $co = $this->co;
 
-                $insertQuery = "INSERT INTO Liste VALUES (NULL, :nom, :idCreator)";
+                $insertQuery = "INSERT INTO Liste VALUES (NULL, :nom, :nomCreator)";
 
 
                 $co->executeQuery($insertQuery, array('nom' => array($nom, PDO::PARAM_STR), 
-                                                'idCreator' => array($idCreator, PDO::PARAM_INT)));
+                                                'nomCreator' => array($nomCreator, PDO::PARAM_STR)));
             }
             catch(PDOException $Exception){
                 echo 'erreur';

@@ -10,18 +10,18 @@
             
         </header>
         <div>
-            <p>Please enter all the informations :</p>
-            <h4>Username</h4>
-            <input type="text" name="login"/>
-            <h4>Password</h4>
-            <input type="password" name="mdp"/>
-            <h4>Email</h4>
-            <input type="email"/>
-            <h4>Date Of Birth</h4>
-            <input type="date"/>
-            <br/>
-            <br/>
-            <input class="button" type="button" value="Sign Up"/>
+            <form method="POST" name="inscription" id="inscription">
+                <h2>Please enter all the informations :</h2>
+                <p>Login
+                    <input type="text" name="username" required/></p>
+                <p>Password
+                <input type="password" name="password" required/></p>
+                <p>Confirm Password
+                <input type="password" name="confirmpassword" required/></p>
+                <br/>
+                <input class="button" type="submit" value="Sign Up"/>
+                <input type="hidden" name="action" value="inscription"/>
+            </form>
         </div>
     </body>
 </html>

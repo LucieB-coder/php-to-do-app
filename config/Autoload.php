@@ -1,5 +1,9 @@
 <?php
 
+/* -----------
+Problème avec l'autoloader
+----------- */
+
 class Autoload
 {
     private static $_instance = null;
@@ -34,10 +38,10 @@ class Autoload
     {
         global $rep;
         $filename = $class.'.php';
-        $dir = array('modeles/','./','config/','controleurs/');
+        $dir = array('./','config/','controleurs/','modeles/Gateways/','modeles/Métier/','modeles/Modele');
         foreach ($dir as $d){
             $file=$rep.$d.$filename; 
-            //echo $file;
+            echo $file;
             if (file_exists($file))
             {
                 include $file;

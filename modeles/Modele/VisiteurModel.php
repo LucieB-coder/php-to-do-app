@@ -1,39 +1,42 @@
 <?php
 
     class VisiteurModel {
-        private $gtwUsr;
-        private $gtwListe;
+        public $gtwUsr;
+        public $gtwListe;
 
         public function __construct() {
-            $co = new Connection();
+            global $rep,$vues,$bd;
+            $co = new Connection($bd['dsn'],$bd['user'],$bd['pswd']);
             $this->gtwUsr = new UserGateway($co);
             $this->gtwListe = new ListeGateway($co);
         }
 
-        public function get_gtwUsr(): UserGateway {
-            return $this->gtwUsr;
+        public function getHashedPassword(string $usr){
+            return $this->gtwUsr->getHashedPassword($usr);
         }
 
-        public function get_gtwListe(): ListeGateway {
-            return $this->gtwListe;
-        }
-
-        public function connexion($login, $mdp){
-            $results = $this->get_gtwUsr()->getUtilisateurbyNameAndPassword($login, $mdp);
-            if ($results != NULL){
-                $_SESSION['role'] = 'user';
-                $_SESSION['login'] = $login;
+        public function existUser(string $usr):bool{
+            if($this->gtwUsr->getUtilisateurNom($usr) != null){
                 return true;
             }
             return false;
         }
 
-        public function inscription($login, $mdp){
-            $this->get_gtwUsr()->creerUtilisateur($login, $mdp);
+        public function connexion($login){
+            $_SESSION['role'] = 'Utilisateur';
+            $_SESSION['login'] = $login;
         }
 
-        public function creerListe($nom) {
-            $this->get_gtwListe()->creerListe($nom, NULL);
+        public function pullPublicLists(){
+            return $this->gtwListe->getPublicLists();
+        }
+
+        public function inscription($login, $mdp){
+            $result=$this->gtwUsr->creerUtilisateur($login, $mdp);
+            if ($result ==true){
+                $_SESSION['role'] = 'Utilisateur';
+                $_SESSION['login'] = $login;
+            }
         }
 
         public function supprListe($id) {

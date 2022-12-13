@@ -1,18 +1,24 @@
 <?php
 
-class VisitorController {
+class ControleurVisiteur {
     
     public function __construct() {
-        global $rep,$vues;
-        //On démarre la session
-        session_sart();
+        global $rep,$vues,$styles,$assets;
         $arrayErrorViews= array();
-
         try{
             $action = $_REQUEST['action']??null;
             switch($action){
                 case NULL:
                     $this->reinit();
+                    break;
+                case 'accessConnectionPage':
+                    require($rep.$vues['connection']);
+                    break;
+                case "accessInscription":
+                    require($rep.$vues['inscription']);
+                    break;
+                case "accessCreationListePage":
+                    require($rep.$vues['creationListe']);
                     break;
                 case "connection":
                     $this->connection($arrayErrorViews);
@@ -35,7 +41,7 @@ class VisitorController {
                     $this->supprTache($arrayErrorViews);
                 default :
                     $arrayErrorViews[]="Erreur innatendue !!!";
-                    require($rep.$vues['error']);
+                    require($rep.$vues['acceuil']);
             }
         } catch(PDOException $e){
                 $dataView[]="Erreur inatendue";
@@ -45,49 +51,67 @@ class VisitorController {
     }
 
     public function reinit(){
-        global $rep,$vues;
+        global $rep,$vues,$dataView;
+        $model = new VisiteurModel();
+        $dataView = $model->pullPublicLists();
         require($rep.$vues['acceuil']);
+
     }
 
     public function connection(array $vues_erreur){
-        global $rep,$vues;
-        
+        global $rep,$vues,$dataView;
         $usrname=$_POST['login']; 
         $pwd=$_POST['mdp'];
         Validation::clear_string($pwd);
         Validation::val_connexion($usrname,$pwd,$vues_erreur);
-
-        $model = new UserModel();
-        $worked=$model->connexion();
-        /* Utiliser si jamais connexion n'a pas marché et qu'on veut remettre le login dans la page pour que le visiteur n'ait pas à le retaper
-        $dVue = array (
-            'username' => $usrname,
-        );
-        */
-        if($worked==false){
-            require('erreur.php');
+        $model= new VisiteurModel();
+        if($model->existUser($usrname)){
+            if(password_verify($pwd,$model->getHashedPassword($usrname))){
+                $model->connexion($usrname);
+                $_REQUEST['action']=null;
+                $this->reinit();
+            }
+            else{
+                $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
+                require($rep.$vues['erreur']);
+            }
+        }
+        else{
+            $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
+            require($rep.$vues['erreur']);
         }
     }
 
     public function inscription(array $vues_erreur){
-        global $rep,$vues;
-        
-        $usrname=$_POST['login']; 
-        $pwd=$_POST['mdp'];
-        Validation::val_connexion($usrname,$pwd,$vues_erreur);
-
-        $model = new UserModel();
-        $model->inscription();
+        global $rep,$vues,$dataView;
+        $usrname=$_POST['username']; 
+        $pwd=$_POST['password'];
+        $confirm=$_POST['confirmpassword'];
+        $vues_erreur=Validation::val_inscription($usrname,$pwd,$confirm,$vues_erreur);
+        if($vues_erreur == []){
+            $hash= password_hash($pwd,PASSWORD_DEFAULT);
+            $model = new VisiteurModel();
+            $model->inscription($usrname,$hash);
+        }
+        $_REQUEST['action']=null;
+        new ControleurVisiteur();
     }
 
     public function creerListe(array $vues_erreur){
         global $rep, $vues;
-        require($rep.$vues['creationListe']);
-
-        $nom=$_POST['nom'];
-        
+        $nom=$_POST['name'];
         $model = new ListeModel();
-        $model->creerListe($nom);
+        if(isset($_SESSION['login'])){
+            foreach($_POST['private'] as $valeur){
+                $private=$valeur;
+                $model->creerListe($nom,$private);
+            }
+        }
+        else{
+            $model->creerListe($nom,null);
+        }
+        $_REQUEST['action']=null;
+        $this->reinit();
     }
 
     public function supprListe(array $vues_erreur){

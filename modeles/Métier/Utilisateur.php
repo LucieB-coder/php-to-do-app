@@ -1,13 +1,11 @@
 <?php
 
 Class Utilisateur {
-    private int $id;
     private string $nom;
     private string $password;
     private $listListe;
 
-    function __construct(int $i, string $n, string $p, $liste) {
-        $this->id=$i;
+    function __construct(string $n, string $p, $liste) {
         $this->nom=$n;
         $this->password=$p;
         $this->listListe=$liste;

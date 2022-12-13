@@ -1,32 +1,50 @@
 <?php
 
-require_once("Connection.php");
-require_once("Utilisateur.php");
-
 class UserGateway {
     private $co;
 
-    public function __construct(Connection $co) { 
+    function __construct(Connection $co) { 
         $this->co = $co; 
     } 
 
-    public function creerUtilisateur(string $nom, string $pwd){
-        if(!empty($id) && !empty($nom) && empty($password)){
-            try{
-                $co = $this->co;
+    function getUtilisateurNom(string $usr){
+        $co=$this->co;
+        $query="SELECT nom FROM Utilisateur WHERE nom=:nom";
+        $co->executeQuery($query,array('nom'=>array($usr,PDO::PARAM_STR)));
+        return $co->getResults();
 
-                $query = "INSERT INTO Utilisateur VALUES (NULL, :nom, :pwd)";
-
-                $co->executeQuery($query, array(':nom' => array($nom, PDO::PARAM_STR), ':pwd' => array($pwd, PDO::PARAM_STR)));
-            }
-            catch(PDOException $Excception){
-                echo 'erreur';
-                echo $Exception->getMessage();
-            }
-        }
     }
 
-    public function delUtilisateur(int $id){
+    function getHashedPassword(string $usrname):?string{
+        $hashedPwd=null;
+        $co=$this->co;
+        $query="SELECT pwd FROM Utilisateur WHERE nom=:nom";
+        $co->executeQuery($query,array('nom'=>array($usrname,PDO::PARAM_STR)));
+        $res=$co->getResults();
+        foreach($res as $row){
+            $hashedPwd=$row['pwd'];
+        }
+        return $hashedPwd;
+    }
+
+    function creerUtilisateur(string $nom, string $pwd){
+        try{
+            $co = $this->co;
+
+            $query = "INSERT INTO Utilisateur VALUES (:nom, :pwd)";
+
+            $co->executeQuery($query, array(':nom' => array($nom, PDO::PARAM_STR), ':pwd' => array($pwd, PDO::PARAM_STR)));
+        }
+        catch(PDOException $Exception){
+            echo 'erreur';
+            echo $Exception->getMessage();
+            return false;
+        }
+
+        return true;
+    }
+
+    function delUtilisateur(int $id){
         if(!empty($id)){
             try{
                 $co = $this->co;
@@ -42,7 +60,7 @@ class UserGateway {
         }
     }
 
-    public function putUtilisateur(Utilisateur $usr){
+    function putUtilisateur(Utilisateur $usr){
         if(!empty($usr.getId()) && !empty($usr.getNom()) && empty($usr.getPassword())){
             try{
                 $co = $this->co;
@@ -66,7 +84,7 @@ class UserGateway {
         }
     }
 
-    public function getUtilisateurById(int $id) : Utilisateur {
+    function getUtilisateurById(int $id) : Utilisateur {
         $usr = null;
         if(!empty($id)){
             try{
@@ -78,7 +96,7 @@ class UserGateway {
 
                 $results = $co->getResults();
 
-                Foreach($results as $row){
+                foreach($results as $row){
                     $usr = new Utilisateur($row['id'], $row['nom'], $row['pwd']);
                 }
             }
@@ -91,26 +109,31 @@ class UserGateway {
         return $usr;
     }
 
-    public function getUtilisateurbyNameAndPassword(string $nom, string $pwd) : Utilisateur {
+    function getUtilisateurbyName(string $nom) : ?Utilisateur {
         $usr = null;
-        if(!empty($nom) && !empty($password)){
-            try{
-                $co = $this->co;
+        $tabList= null;
+        try{
+            $co = $this->co;
 
-                $query = "SELECT * FROM Utilisateur WHERE nom=:nom AND pwd=:pwd";
+            $queryLists="SELECT id, nom FROM Liste WHERE nomCreateur=:nomCrea";
+            $queryUser = "SELECT * FROM Utilisateur WHERE nom=:nom";
 
-                $co->executeQuery($query, array(':nom' => array($nom, PDO::PARAM_STR), ':pwd' => array($pwd, PDO::PARAM_STR)));
-
-                $results = $co->getResults();
-
-                Foreach($results as $row){
-                    $usr = new Utilisateur($row['id'], $row['nom'], $row['pwd']);
-                }
+            $co->executeQuery($queryLists,array('nomCrea'=>array($nom,PDO::PARAM_STR)));
+            $res = $co->getResults();
+            foreach($res as $row){
+                $tabList[]= new Liste($row['id'],$row['nom'],$nom,array());
             }
-            catch(PDOException $Exception){
-                echo 'erreur';
-                echo $Exception->getMessage();
+            $co->executeQuery($queryUser, array('nom' => array($nom, PDO::PARAM_STR)));
+
+            $results = $co->getResults();
+
+            foreach($results as $row){
+                $usr = new Utilisateur($row['nom'], $row['pwd'],$tabList);
             }
+        }
+        catch(PDOException $Exception){
+            echo 'erreur';
+            echo $Exception->getMessage();
         }
         return $usr;
     }

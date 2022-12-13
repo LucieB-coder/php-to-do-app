@@ -1,15 +1,18 @@
 <?php
 
-class UserController{
+class ControleurUtilisateur{
     
-    public function __construct() {
-        global $rep,$vues;
-        //On démarre la session
-        session_sart();
+    function __construct() {
+        global $rep,$vues, $dataView;
         $arrayErrorViews= array();
 
         $action = $_REQUEST['action']??null;
         switch($action){
+            case "accessPrivateLists":
+                $this->accessPrivateLists($arrayErrorViews);
+            case "accessProfilePage":
+                require($rep.$vues['profile']);
+                break;
             case "deconnection":
                 $this->deconnection($arrayErrorViews);
                 break;
@@ -28,14 +31,16 @@ class UserController{
         }
     } 
 
-    public function deconnection($arrayErrorViews){
-        // appeler la méthode deco du modèle
-        $retour = UserModel::deconnection();
-        require($rep.$vues['acceuil']);
+    function deconnection($arrayErrorViews){
+        global $rep, $vues, $dataView;
+        $model = new UserModel();
+        $retour = $model->deconnection();
+        $_REQUEST['action']=null;
+        $control= new ControleurVisiteur();
     }
 
-    public function creerListePv($arrayErrorViews){
-        global $rep, $vues;
+    function creerListePv($arrayErrorViews){
+        global $rep, $vues, $dataView;
         //recupérer les valeurs du formulaire
         $nomListe=$_POST['ListName'];
         $privee=$_POST['isPrivate'];
@@ -62,19 +67,26 @@ class UserController{
         }
     }
 
-    public function changerPassword($arrayErrorViews){
-        global $rep, $vues;
+    function changerPassword($arrayErrorViews){
+        global $rep, $vues, $dataView;
         $password1=$_POST['password1'];
         $passwordConfirm=$_POST['passwordConfirm'];
         $newPassword=Validation::val_changer_password($password1,$passwordConfirm);
 
         try{
             UserModel::changerPassword($newPassword);
-            require($rep.$vues['profil'])
+            require($rep.$vues['profil']);
         }catch(PDOException $e){
             $dataView[]="Erreur inatendue";
             require($rep.$vues['erreur']);
         }
+    }
+
+    function accessPrivateLists($arrayErrorViews){
+        global $rep, $vues, $dataView;
+        $model = new UserModel();
+        $dataView = $model->pullListesPrivees($_SESSION['login']);
+        require($rep.$vues['listesPrivees']);
     }
 }
 
