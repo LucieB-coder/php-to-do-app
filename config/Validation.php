@@ -6,8 +6,8 @@
                 $dataVueEreur[] ="Nom d'utilisateur manquant";
                 throw new Exception('pas de username');
             }
-            $username = Validation::clear_string($username);
-            if($username == false){
+            $usrName = Validation::clear_string($usrName);
+            if($usrName == false){
                 $dataVueEreur[] = "Sanitizing error";
                 throw new Exception('sanitizing fail');
             }
@@ -72,7 +72,7 @@
         }
 
         static function clear_string($champ){
-            return filter_var($champ, FILTER_SANITIZE_SPECIAL_VAR);
+            return filter_var($champ, FILTER_SANITIZE_SPECIAL_CHARS);
         }
     }
 
