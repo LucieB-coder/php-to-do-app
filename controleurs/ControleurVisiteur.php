@@ -109,8 +109,7 @@ class ControleurVisiteur {
         global $rep,$vues,$dataView;
         $usrname=$_POST['login']; 
         $pwd=$_POST['mdp'];
-        Validation::clear_string($pwd);
-        Validation::val_connexion($usrname,$pwd,$vues_erreur);
+        $vues_erreur=Validation::val_connexion($usrname,$pwd,$vues_erreur);
         $model= new VisiteurModel();
         if($model->existUser($usrname)){
             if(password_verify($pwd,$model->getHashedPassword($usrname))){
@@ -147,6 +146,7 @@ class ControleurVisiteur {
     public function creerListe(array $vues_erreur){
         global $rep, $vues;
         $nom=$_POST['name'];
+        $vues_erreur=Validation::val_intitule($nom, $vues_erreur);
         $model = new ListeModel();
         if(isset($_SESSION['login'])){
             $private=$_POST['private'];
@@ -173,6 +173,7 @@ class ControleurVisiteur {
         require($rep.$vues['creerTache']);
 
         $intitule = $_POST['intitule'];
+        $vues_erreur=Validation::val_intitule($intitule, $vues_erreur);
 
         $model = new ListeModel();
         $model->creerTache();

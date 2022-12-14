@@ -3,7 +3,7 @@
 //Prefixe
 $rep=__DIR__.'/../';
 //BD
-$bd['dsn'] = "mysql:host=localhost;port=8888;dbname=dbPhp";
+$bd['dsn'] = "mysql:host=localhost;port=8888;dbname=bdPhp";
 $bd['user'] = "root";
 $bd['pswd'] = "root";
 //Vues
