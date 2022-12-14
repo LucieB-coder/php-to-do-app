@@ -4,7 +4,7 @@ class FrontControleur{
 
     public function __construct(){
         $liste_actions_utilisateur = array('accessPrivateLists','accessProfilePage','deconnection','crerListePv','desinscription','changerPassword');
-        $liste_actions_visiteur = array('accessCreationListePage','accessInscription','accessConnectionPage','creerListe','suprrListe','connection','inscription','creerTache','cocherTache','supprTache');
+        $liste_actions_visiteur = array('goHome','changeCompletedTache','accessCreationTachePage','addTache','delTache','accessListInfos','accessCreationListePage','accessInscription','accessConnectionPage','creerListe','delListe','connection','inscription');
         global $rep,$vues,$bd,$dataView,$styles,$assets;
         session_start();
         try{

@@ -3,7 +3,7 @@
 class ControleurUtilisateur{
     
     function __construct() {
-        global $rep,$vues, $dataView;
+        global $rep,$vues, $dataView,$styles,$assets;
         $arrayErrorViews= array();
 
         $action = $_REQUEST['action']??null;

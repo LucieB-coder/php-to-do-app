@@ -87,44 +87,74 @@ class ListeGateway {
         return $listes;
     }
 
-    public function creerTache(string $intitule){
-        if(!empty($id) && !empty($intitutle)){
-            try{
-                $co = $this->co;
+    public function getById($id){
+        $taches=null;
+        $liste=null;
+        $co = $this->co;
+        $query = "SELECT * FROM Liste WHERE id=:id";
 
-                $query = "INSERT INTO Tache VALUES (NULL, :intitule, 0)";
+        $co->executeQuery($query, array('id' => array($id, PDO::PARAM_INT)));
 
-                $co->executeQuery($query, array(':intitule' => array($nom, PDO::PARAM_STR)));
+        $results = $co->getResults();
+        foreach ($results as $row){
+            $idListe = $row['id'];
+            $queryTaches = "SELECT * FROM Tache WHERE idListe=:id";
+            $co->executeQuery($queryTaches, array(':id' => array($idListe, PDO::PARAM_INT)));
+            $resultsTaches = $co->getResults();
+
+            foreach($resultsTaches as $rowTaches){
+                if($rowTaches['complete']=="0"){
+                    $taches[] = new Tache($rowTaches['id'], $rowTaches['nom'],false,$idListe);
+                }else{
+                    $taches[] = new Tache($rowTaches['id'], $rowTaches['nom'],true,$idListe);
+                }
+                
             }
-            catch(PDOException $Exception){
-                echo 'erreur';
-                echo $Exception->getMessage();
-            }
+
+            $liste = new Liste($row['id'], $row['nom'],$row['nomCreateur'], $taches);
+        }
+        return $liste;
+    }
+
+    public function creerTache(string $nom, int $idListe){
+        try{
+            $co = $this->co;
+
+            $query = "INSERT INTO Tache VALUES (NULL, :intitule, 0,:idListe)";
+
+            $co->executeQuery($query, array(':intitule' => array($nom, PDO::PARAM_STR),
+                                            'idListe' => array($idListe,PDO::PARAM_INT)));
+        }
+        catch(PDOException $Exception){
+            echo 'erreur';
+            echo $Exception->getMessage();
         }
     }
 
     public function delTache(int $id){
-        if(!empty($id)){
-            try{
-                $co = $this->co;
+        try{
+            $co = $this->co;
 
-                $query = "DELETE FROM Tache WHERE id=:id";
+            $query = "DELETE FROM Tache WHERE id=:id";
 
-                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
-            }
-            catch(PDOException $Exception){
-                echo 'erreur';
-                echo $Exception->getMessage();
-            }
+            $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
+        }
+        catch(PDOException $Exception){
+            echo 'erreur';
+            echo $Exception->getMessage();
         }
     }
 
-    public function completeTache(int $id){
-        if(!empty($id)){
+    public function updateTache(int $id, bool $complete){
             try{
                 $co = $this->co;
-
-                $query = "UPDATE Tache SET isCompleted=true WHERE id=:id";
+                if($complete==true){
+                    $query = "UPDATE Tache SET complete=0 WHERE id=:id";
+                }
+                else{
+                    $query = "UPDATE Tache SET complete=1 WHERE id=:id";
+                }
+                
 
                 $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
             }
@@ -132,6 +162,23 @@ class ListeGateway {
                 echo 'erreur';
                 echo $Exception->getMessage();
             }
+    }
+
+    public function getTacheById(int $id){
+        $complete=null;
+        $co=$this->co;
+        $query="SELECT complete FROM Tache WHERE id=:id";
+        $co->executeQuery($query,array('id'=>array($id,PDO::PARAM_INT)));
+        $res=$co->getResults();
+        foreach($res as $row){
+            $complete=$row['complete'];
+        }
+        if($complete=="0")
+        {
+            return false;
+        }
+        else{
+            return true;
         }
     }
 
@@ -153,18 +200,16 @@ class ListeGateway {
     
 
     public function delListe(int $id){
-        if(!empty($id)){
-            try{
-                $co = $this->co;
-
-                $query = "DELETE FROM Tache WHERE id=:id";
-
-                $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
-            }
-            catch(PDOException $Exception){
-                echo 'erreur';
-                echo $Exception->getMessage();
-            }
+        try{
+            $co = $this->co;
+            $queryDelTaches="DELETE FROM Tache WHERE idListe=:id";
+            $query = "DELETE FROM Liste WHERE id=:id";
+            $co->executeQuery($queryDelTaches, array(':id' => array($id, PDO::PARAM_STR)));
+            $co->executeQuery($query, array(':id' => array($id, PDO::PARAM_STR)));
+        }
+        catch(PDOException $Exception){
+            echo 'erreur';
+            echo $Exception->getMessage();
         }
     }
 }

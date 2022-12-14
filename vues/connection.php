@@ -7,6 +7,10 @@
     <body>
         <header>
             <h1>You are back ?!</h1>
+            <form method="POST" name="goBackHome" id="Go Home">
+                <input type="submit" value="Home Page"/>
+                <input type="hidden" name="action" value="goHome"/>
+            </form>
         </header>
         <div>
             <form method="POST" name="connectionForm" id="connectionForm">

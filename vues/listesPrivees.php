@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html>
+    <header>
+        <h2>Private Lists</h2>
+        <form method="POST" name="goBackHome" id="Go Home">
+            <input type="submit" value="Home Page"/>
+            <input type="hidden" name="action" value="goHome"/>
+        </form>
+    </header>
     <body>
         <div>
-            <h2>Private Lists</h2>
+            
             <?php
-            if (isset($dataView)) {
+            if(isset($dataView)) {
                 foreach ($dataView as $liste){
-                    echo $liste->nom;
-                    echo '<br/>';
-                    if($liste->taches != null){
-                        foreach($liste->taches as $tache){
-                            echo '    * '.$tache->nom;
-                            echo '<br/>';
-                        }
-                    }
+                    echo '
+                    <div>
+                        <form method="post" name="accessList" id="accessList">
+                            <p>• '.$liste->nom.'
+                            <input type="submit" value="View List"/></p>
+                            <input type="hidden" name="action" value="accessListInfos"/>
+                            <input type="hidden" name="liste" value="'.$liste->id.'"/>
+                        </form>
+                    </div>';
                 }
             }
             ?>

@@ -14,6 +14,8 @@ $vues['inscription']='vues/inscription.php';
 $vues['profile']='vues/profile.php';
 $vues['listesPrivees']='vues/listesPrivees.php';
 $vues['creationListe']='vues/creationListe.php';
+$vues['infosListe']='vues/infosListe.php';
+$vues['creationTache']='vues/creationTache.php';
 // Styles
 $styles['commun']='vues/styles/commonStyles.css';
 $styles['connection']='vues/styles/connectionStyle.css';
