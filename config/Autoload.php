@@ -38,10 +38,9 @@ class Autoload
     {
         global $rep;
         $filename = $class.'.php';
-        $dir = array('./','config/','controleurs/','modeles/Gateways/','modeles/Métier/','modeles/Modele');
+        $dir = array('./','config/','controleurs/','modeles/Gateways/','modeles/Métier/','modeles/Modele/');
         foreach ($dir as $d){
-            $file=$rep.$d.$filename; 
-            echo $file;
+            $file=$rep.$d.$filename;
             if (file_exists($file))
             {
                 include $file;

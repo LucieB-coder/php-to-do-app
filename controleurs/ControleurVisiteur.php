@@ -50,6 +50,9 @@ class ControleurVisiteur {
                 case "delListe":
                     $this->delListe($arrayErrorViews);
                     break;
+                case "deconnection":
+                    $this->deconnection($arrayErrorViews);
+                    break;
                 default :
                     $arrayErrorViews[]="Erreur innatendue !!!";
                     require($rep.$vues['acceuil']);
@@ -61,8 +64,17 @@ class ControleurVisiteur {
         exit(0);
     }
 
+
+    function deconnection($arrayErrorViews){
+        global $rep, $vues, $dataView;
+        $model = new UserModel();
+        $retour = $model->deconnection();
+        $_REQUEST['action']=null;
+        $control= new ControleurVisiteur();
+    }
+
     public function reinit(){
-        global $rep,$vues,$dataView;
+        global $rep,$vues,$dataView,$styles;
         $model = new VisiteurModel();
         $dataView = $model->pullPublicLists();
         require($rep.$vues['acceuil']);

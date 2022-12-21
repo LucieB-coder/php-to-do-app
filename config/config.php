@@ -3,7 +3,7 @@
 //Prefixe
 $rep=__DIR__.'/../';
 //BD
-$bd['dsn'] = "mysql:host=localhost;port=8888;dbname=bdPhp";
+$bd['dsn'] = "mysql:host=localhost;port=8888;dbname=dbPhp";
 $bd['user'] = "root";
 $bd['pswd'] = "root";
 //Vues
@@ -16,11 +16,14 @@ $vues['listesPrivees']='vues/listesPrivees.php';
 $vues['creationListe']='vues/creationListe.php';
 $vues['infosListe']='vues/infosListe.php';
 $vues['creationTache']='vues/creationTache.php';
+
 // Styles
-$styles['commun']='vues/styles/commonStyles.css';
-$styles['connection']='vues/styles/connectionStyle.css';
+$styles['commun']='styles/commonStyles.css';
+$styles['acceuil']='styles/acceuilStyles.css';
+$styles['connection']='styles/connectionStyles.css';
+$styles['listesPv']="styles/privateListsStyles.css";
 
 // Assets
-$assets['logo']='assets/chekliste.png';
+$assets['logo']='assets/logo.png';
 
 ?>

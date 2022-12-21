@@ -6,38 +6,21 @@ class ControleurUtilisateur{
         global $rep,$vues, $dataView,$styles,$assets;
         $arrayErrorViews= array();
 
-        $action = $_REQUEST['action']??null;
+        $action = $_REQUEST['action'];
         switch($action){
             case "accessPrivateLists":
                 $this->accessPrivateLists($arrayErrorViews);
-            case "accessProfilePage":
-                require($rep.$vues['profile']);
-                break;
-            case "deconnection":
-                $this->deconnection($arrayErrorViews);
-                break;
+            
             case "creerListePv":
                 $this->creerListe($arrayErrorViews);
                 break;
-            case "desinscription":
-                $this->desinctription($arrayErrorViews);
-                break;
-            case "changerInfos":
-                $this->changerPassword($arrayErrorViews);
-                break;
-            default :
+            default:
                 $arrayErrorViews[]="Erreur innatendue !!!";
                 require($rep.$vues['error']);
         }
     } 
 
-    function deconnection($arrayErrorViews){
-        global $rep, $vues, $dataView;
-        $model = new UserModel();
-        $retour = $model->deconnection();
-        $_REQUEST['action']=null;
-        $control= new ControleurVisiteur();
-    }
+    
 
     function creerListePv($arrayErrorViews){
         global $rep, $vues, $dataView;
@@ -64,21 +47,6 @@ class ControleurUtilisateur{
                 $dataView[]="Erreur inatendue";
                 require($rep.$vues['erreur']);
             }
-        }
-    }
-
-    function changerPassword($arrayErrorViews){
-        global $rep, $vues, $dataView;
-        $password1=$_POST['password1'];
-        $passwordConfirm=$_POST['passwordConfirm'];
-        $newPassword=Validation::val_changer_password($password1,$passwordConfirm);
-
-        try{
-            UserModel::changerPassword($newPassword);
-            require($rep.$vues['profil']);
-        }catch(PDOException $e){
-            $dataView[]="Erreur inatendue";
-            require($rep.$vues['erreur']);
         }
     }
 

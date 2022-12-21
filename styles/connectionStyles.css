@@ -1,0 +1,60 @@
+.body{
+  align-items: center;
+}
+
+header{
+  place-content: start center;
+}
+
+h1{
+  margin-left: 5%;
+}
+
+#connectionForm{
+  background-color: #E4F8FF;
+  width: 50%;
+  padding: 5%;
+  border-radius: 50px;
+  place-content: start center;
+}
+
+#connectionForm > input[type="text"]{
+  width: 60%;
+  height: 40px;
+  margin-left: 20%;
+  border-radius: 10px;
+  border: 1px solid #212F3D; 
+  margin-bottom: 3%;
+}
+
+#connectionForm > input[type="password"]{
+  width: 60%;
+  height: 40px;
+  margin-left: 20%;
+  border-radius: 10px;
+  border: 1px solid #212F3D; 
+  margin-bottom: 3%;
+}
+
+.button{
+  border-radius: 50px;
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 10%;
+}
+
+.accesInscription{
+  margin-top: 2%;
+    background: none;
+    border:none;
+    color: #212F3D;
+    background-color: #F7F9F9;
+    font-family: sans-serif;
+    font-size: 25;
+    padding-left : 100px;
+    padding-right : 100px;
+    padding-top:30px;
+    padding-bottom:30px;
+    border-radius: 50px;
+    width: 100%;
+}
