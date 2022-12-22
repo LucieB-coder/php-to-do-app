@@ -1,14 +1,16 @@
 <?php
 
 class UserModel{
-    public $listgw;
-    public $usergw;
+    private $usergw;
 
     function __construct(){
         global $rep,$vues,$bd;
         $co = new Connection($bd['dsn'],$bd['user'],$bd['pswd']);
         $this->usergw = new UserGateway($co);
-        $this->listgw = new ListeGateway($co);
+    }
+
+    public function get_UserGw(){
+        return $this->usergw;
     }
 
     function deconnection(){
@@ -17,22 +19,32 @@ class UserModel{
         $_SESSION = array();
     }
 
-    function creerListePv($nom,$idCeator){
-        $this->listgw->creerListe($nom,$idCreator);
+    public function getHashedPassword(string $usr){
+        return $this->get_UserGw()->getHashedPassword($usr);
     }
 
-    function desinscription($login){
-        $this->usergw->delUtilisateur($login);
+    public function existUser(string $usr):bool{
+        if($this->get_UserGw()->getUtilisateurNom($usr) != null){
+            return true;
+        }
+        return false;
     }
 
-    function changerPassword($newPassword){
-        $this->usergw->putPassword($newPassword);
+    public function connexion($login){
+        $_SESSION['role'] = 'Utilisateur';
+        $_SESSION['login'] = $login;
     }
 
-    function pullListesPrivees($nom){
-        $listes=$this->listgw->getByCreator($nom);
-        return $listes;
+
+    public function inscription($login, $mdp){
+        $result=$this->get_UserGw()->creerUtilisateur($login, $mdp);
+        if ($result ==true){
+            $_SESSION['role'] = 'Utilisateur';
+            $_SESSION['login'] = $login;
+        }
     }
+
+    
 }
 
 ?>

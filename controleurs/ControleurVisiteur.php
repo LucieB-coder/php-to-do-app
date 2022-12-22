@@ -75,7 +75,7 @@ class ControleurVisiteur {
 
     public function reinit(){
         global $rep,$vues,$dataView,$styles;
-        $model = new VisiteurModel();
+        $model = new ListeModel();
         $dataView = $model->pullPublicLists();
         require($rep.$vues['acceuil']);
 
@@ -93,7 +93,7 @@ class ControleurVisiteur {
         global $rep,$vues,$dataView;
         $nom=$_POST['name'];
         $idListe=$_POST['liste'];
-        $model = new ListeModel();
+        $model = new TacheModel();
         $model->addTache($nom,$idListe);
         $_REQUEST['action']="accessListInfos";
         $this->accessListInfos($arrayErrorViews);
@@ -102,7 +102,7 @@ class ControleurVisiteur {
     public function delTache($arrayErrorViews){
         global $rep,$vues,$dataView;
         $idTache=$_POST['tache'];
-        $model= new ListeModel();
+        $model= new TacheModel();
         $model->delTache($idTache);
         $_REQUEST['action']="accessListInfos";
         $this->accessListInfos($arrayErrorViews);
@@ -111,7 +111,7 @@ class ControleurVisiteur {
     public function changeCompletedTache($arrayErrorViews){
         global $rep,$vues,$dataView;
         $idTache=$_POST['tache'];
-        $model = new ListeModel();
+        $model = new TacheModel();
         $model->changeCompletedTache($idTache);
         $_REQUEST['action']="accessListInfos";
         $this->accessListInfos($arrayErrorViews);
@@ -125,7 +125,7 @@ class ControleurVisiteur {
         if(!empty($vues_erreur)){
             require($rep.$vues['connection']);
         }
-        $model= new VisiteurModel();
+        $model= new UserModel();
         if($model->existUser($usrname)){
             if(password_verify($pwd,$model->getHashedPassword($usrname))){
                 $model->connexion($usrname);
@@ -148,7 +148,7 @@ class ControleurVisiteur {
         $usrname=$_POST['username']; 
         $pwd=$_POST['password'];
         $confirm=$_POST['confirmpassword'];
-        $model = new VisiteurModel();
+        $model = new UserModel();
         $vues_erreur=Validation::val_inscription($usrname,$pwd,$confirm,$vues_erreur);
         if($model->existUser($usrname)){
             $vues_erreur[]="Username already taken";
@@ -162,7 +162,7 @@ class ControleurVisiteur {
         }
         
         $_REQUEST['action']=null;
-        new ControleurVisiteur();
+        $this->reinit();
     }
 
     public function creerListe(array $vues_erreur){
@@ -188,17 +188,6 @@ class ControleurVisiteur {
         $model->delListe($idListe);
         $_REQUEST['action']=null;
         $this->reinit();      
-    }
-
-    public function creerTache(array $vues_erreur){
-        global $rep, $vues;
-        require($rep.$vues['creerTache']);
-
-        $intitule = $_POST['intitule'];
-        $vues_erreur=Validation::val_intitule($intitule, $vues_erreur);
-
-        $model = new ListeModel();
-        $model->creerTache();
     }
 }
 

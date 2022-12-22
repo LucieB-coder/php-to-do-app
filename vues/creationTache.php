@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>creationTache</title>
-        <link rel="stylesheet" href="<?=$styles['commun']?>">
+        <link rel="stylesheet" href="styles/commonStyles.css">
         <link rel="stylesheet" href="styles/creationStyles.css">
     </head>
     <body>
@@ -17,6 +17,14 @@
             <form method="post" name="creationForm" id="creationForm">
                 <h4>Name of the task</h4>
                 <input type="text" name="name" id="name" required/>
+
+                <br/>
+                <?php
+                if(isset($vues_erreur)){
+                    echo '<h4 id="error">'.$vues_erreur[0].'</h4>';
+                }
+                ?>
+
                 <input class="button" type="submit" value="Create"/>
                 <input type="hidden" name="action" value="addTache"/>
                 <input type="hidden" name="liste" value="<?=$dataView?>"/>

@@ -1,7 +1,7 @@
 <?php
 
 class ListeModel{
-    public $listgw;
+    private $listgw;
 
     function __construct(){
         global $rep,$vues,$bd;
@@ -9,37 +9,41 @@ class ListeModel{
         $this->listgw = new ListeGateway($co);
     }
 
+    public function get_gtwListe(){
+        return $this->listgw;
+    }
+
     function creerListe(string $nom, $private){
         if(isset($_SESSION['login'])){
             if($private!=null){
-                $this->listgw->creerListe($nom,$_SESSION['login']);
+                $this->get_gtwListe()->creerListe($nom,$_SESSION['login']);
             }else{
-                $this->listgw->creerListe($nom,null);
+                $this->get_gtwListe()->creerListe($nom,null);
             }
         }else{
-            $this->listgw->creerListe($nom,null);
+            $this->get_gtwListe()->creerListe($nom,null);
         }
     }
 
+    function creerListePv($nom,$idCeator){
+        $this->get_gtwListe()->creerListe($nom,$idCreator);
+    }
+
+    public function pullPublicLists(){
+        return $this->get_gtwListe()->getPublicLists();
+    }
+
+    function pullListesPrivees($nom){
+        $listes=$this->get_gtwListe()->getByCreator($nom);
+        return $listes;
+    }
+
     function pullListById(int $idListe){
-        return $this->listgw->getById($idListe);
-    }
-
-    function addTache(string $intitule, int $idListe ){
-        $this->listgw->creerTache($intitule,$idListe);
-    }
-
-    function delTache(int $idTache){
-        $this->listgw->delTache($idTache);
-    }
-
-    function changeCompletedTache(int $idTache){
-        $complete=$this->listgw->getTacheById($idTache);
-        $this->listgw->updateTache($idTache,$complete);
+        return $this->get_gtwListe()->getById($idListe);
     }
 
     function delListe(int $idListe){
-        $this->listgw->delListe($idListe);
+        $this->get_gtwListe()->delListe($idListe);
     }
 }
 

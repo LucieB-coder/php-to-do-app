@@ -62,7 +62,7 @@
         }
 
         static function clear_string($champ){
-            return filter_var($champ, FILTER_SANITIZE_SPECIAL_CHARS);
+            return filter_var($champ, FILTER_SANITIZE_STRING);
         }
     }
 

@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>creationListe</title>
-        <link rel="stylesheet" href="<?=$styles['commun']?>"/>
+        <link rel="stylesheet" href="styles/commonStyles.css"/>
         <link rel="stylesheet" href="styles/creationStyles.css"/>
     </head>
     <body>
@@ -24,6 +24,12 @@
                                 <label for="private">Private List?</label>
                             </p>
                             ';
+                }
+                ?>
+                <br/>
+                <?php
+                if(isset($vues_erreur)){
+                    echo '<h4 id="error">'.$vues_erreur[0].'</h4>';
                 }
                 ?>
                 <input class="button" type="submit" value="Create List"/>

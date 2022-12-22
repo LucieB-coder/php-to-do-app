@@ -20,8 +20,6 @@ class ControleurUtilisateur{
         }
     } 
 
-    
-
     function creerListePv($arrayErrorViews){
         global $rep, $vues, $dataView;
         //recupérer les valeurs du formulaire
@@ -35,14 +33,14 @@ class ControleurUtilisateur{
         // appelle à la methode du modèle
         if($privee == true){
             try{
-                UserModel::creerListePv($nomListe,$_SESSION['login']);
+                ListeModel::creerListePv($nomListe,$_SESSION['login']);
             } catch (PDOException $e){
                 $dataView[]="Erreur inatendue";
                 require($rep.$vues['erreur']);
             }
         }else{
             try{
-                VisitorModel::creerListe($nomListe);
+                ListeModel::creerListe($nomListe);
             } catch (PDOException $e){
                 $dataView[]="Erreur inatendue";
                 require($rep.$vues['erreur']);
@@ -52,7 +50,7 @@ class ControleurUtilisateur{
 
     function accessPrivateLists($arrayErrorViews){
         global $rep, $vues, $dataView;
-        $model = new UserModel();
+        $model = new ListeModel();
         $dataView = $model->pullListesPrivees($_SESSION['login']);
         require($rep.$vues['listesPrivees']);
     }
