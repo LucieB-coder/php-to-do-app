@@ -3,8 +3,8 @@
 
 <head>
     <title>Acceuil</title>
-    <link rel="stylesheet" href="<?=$styles['commun']?>"/>
-    <link rel="stylesheet" href="<?=$styles['acceuil']?>"/>
+    <link rel="stylesheet" href="styles/commonStyles.css"/>
+    <link rel="stylesheet" href="styles/acceuilStyles.css"/>
 </head>
 
 <body>

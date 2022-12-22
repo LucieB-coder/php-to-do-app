@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>connection</title>
-        <link rel="stylesheet" href="<?=$styles['commun']?>"/>
-        <link rel="stylesheet" href="<?=$styles['connection']?>"/>
+        <link rel="stylesheet" href="styles/commonStyles.css"/>
+        <link rel="stylesheet" href="styles/connectionStyles.css"/>
     </head>
     <body>
         <header>
@@ -15,12 +15,15 @@
         </header>
         <div class="body">
             <form method="POST" name="connectionForm" id="connectionForm">
-                <h4>Login</h4>
+                <h4>Username</h4>
                     <input type="text" name="login" required/>
                 <h4>Password</h4>
                 <input type="password" name="mdp" required/>
-                <br/>
-                <br/>
+                <?php
+                if(isset($vues_erreur)){
+                    echo '<h4 id="error">Incorrect Username or Password</h4>';
+                }
+                ?>
                 <input class="button" type="submit" value="Log In"/>
                 <input type="hidden" name="action" value="connection">
             </form>

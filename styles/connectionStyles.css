@@ -10,6 +10,12 @@ h1{
   margin-left: 5%;
 }
 
+#error{
+  margin-top: 5%;
+  margin-bottom: -5%;
+  margin-left: 29%;
+}
+
 #connectionForm{
   background-color: #E4F8FF;
   width: 50%;

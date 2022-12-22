@@ -122,6 +122,9 @@ class ControleurVisiteur {
         $usrname=$_POST['login']; 
         $pwd=$_POST['mdp'];
         $vues_erreur=Validation::val_connexion($usrname,$pwd,$vues_erreur);
+        if(!empty($vues_erreur)){
+            require($rep.$vues['connection']);
+        }
         $model= new VisiteurModel();
         if($model->existUser($usrname)){
             if(password_verify($pwd,$model->getHashedPassword($usrname))){
@@ -130,13 +133,13 @@ class ControleurVisiteur {
                 $this->reinit();
             }
             else{
-                $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
-                require($rep.$vues['erreur']);
+                $vues_erreur =array('username'=>$usrname,'password'=>$pwd);
+                require($rep.$vues['connection']);
             }
         }
         else{
-            $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
-            require($rep.$vues['erreur']);
+            $vues_erreur =array('username'=>$usrname,'password'=>$pwd);
+            require($rep.$vues['connection']);
         }
     }
 
@@ -145,12 +148,19 @@ class ControleurVisiteur {
         $usrname=$_POST['username']; 
         $pwd=$_POST['password'];
         $confirm=$_POST['confirmpassword'];
+        $model = new VisiteurModel();
         $vues_erreur=Validation::val_inscription($usrname,$pwd,$confirm,$vues_erreur);
-        if($vues_erreur == []){
+        if($model->existUser($usrname)){
+            $vues_erreur[]="Username already taken";
+        }
+        if(empty($vues_erreur)){
             $hash= password_hash($pwd,PASSWORD_DEFAULT);
-            $model = new VisiteurModel();
             $model->inscription($usrname,$hash);
         }
+        else{
+            require($rep.$vues['inscription']);
+        }
+        
         $_REQUEST['action']=null;
         new ControleurVisiteur();
     }
