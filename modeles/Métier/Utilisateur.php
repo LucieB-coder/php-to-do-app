@@ -10,9 +10,7 @@ Class Utilisateur {
         $this->password=$p;
         $this->listListe=$liste;
     }
-    function get_id(): int {
-        return $this->id;
-    }
+    
     function get_nom(): string {
         return $this->nom;
     }

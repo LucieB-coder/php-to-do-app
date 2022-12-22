@@ -3,57 +3,47 @@
     class Validation {
         static function val_connexion($usrName,$mdp,$dataVueEreur) {
             if (!isset($usrName)||$usrName=="") {
-                $dataVueEreur[] ="Nom d'utilisateur manquant";
-                throw new Exception('pas de username');
+                $dataVueEreur[] ="Username or password missing";
             }
             $usrName = Validation::clear_string($usrName);
             if($usrName == false){
                 $dataVueEreur[] = "Sanitizing error";
-                throw new Exception('sanitizing fail');
             }
             if (!isset($mdp)||$mdp=="") {
-                $dataVueEreur[] ="Mot de passe manquant";
-                throw new Exception('pas de password');
+                $dataVueEreur[] ="Username or password missing";
             }
             $mdp = Validation::clear_string($mdp);
             if($mdp == false){
                 $dataVueEreur[] = "Sanitizing error";
-                throw new Exception('sanitizing fail');
             }
             return $dataVueEreur;
         }
 
-        static function val_inscription($dataVueEreur){
-            if (!isset($_POST['username'])||$_POST['username']==="") {
-                $dataVueEreur[] ="Nom d'utilisateur manquant";
-                throw new Exception('pas de username');
+        static function val_inscription($username,$pwd1,$pwd2,$dataVueEreur){
+            if (!isset($username)||$username==="") {
+                $dataVueEreur[] ="All fields are required";
             }
             $_POST['username'] = Validation::clear_string($_POST['username']);
             if($_POST['username'] == false){
                 $dataVueEreur[] = "Sanitizing error";
                 throw new Exception('sanitizing fail');
             }
-            if (!isset($_POST['username'])||$_POST['username']==="") {
-                $dataVueEreur[] ="Mot de passe manquant";
-                throw new Exception('pas de password');
+            if (!isset($pwd1)||$pwd1==="") {
+                $dataVueEreur[] ="All fields are required";
             }
             $_POST['password'] = Validation::clear_string($_POST['password']);
             if($_POST['password'] == false){
                 $dataVueEreur[] = "Sanitizing error";
-                throw new Exception('sanitizing fail');
             }
-            if (!isset($_POST['confirmpassword'])||$_POST['confirmpassword']==="") {
-                $dataVueEreur[] ="Confirmation mot de passe manquant";
-                throw new Exception('pas de confirmation password');
+            if (!isset($pwd2)||$pwd2==="") {
+                $dataVueEreur[] ="All fields are required";
             }
             $_POST['confirmpassword'] = Validation::clear_string($_POST['confirmpassword']);
             if($_POST['confirmpassword'] == false){
                 $dataVueEreur[] = "Sanitizing error";
-                throw new Exception('sanitizing fail');
             }
-            if($_POST['password'] !== $_POST['confirmpassword']){
-                $dataVueEreur[]="Mot de passe et confirmation différents";
-                throw new Exception("Mot de passe et confirmation différents");
+            if($pwd1 !== $pwd2){
+                $dataVueEreur[]="Invalid confirmation";
             }
             return $dataVueEreur;
         }

@@ -50,6 +50,9 @@ class ControleurVisiteur {
                 case "delListe":
                     $this->delListe($arrayErrorViews);
                     break;
+                case "deconnection":
+                    $this->deconnection($arrayErrorViews);
+                    break;
                 default :
                     $arrayErrorViews[]="Erreur innatendue !!!";
                     require($rep.$vues['acceuil']);
@@ -59,6 +62,15 @@ class ControleurVisiteur {
                 require(__DIR__.'/../vues/erreur.php');
         } 
         exit(0);
+    }
+
+
+    function deconnection($arrayErrorViews){
+        global $rep, $vues, $dataView;
+        $model = new UserModel();
+        $retour = $model->deconnection();
+        $_REQUEST['action']=null;
+        $control= new ControleurVisiteur();
     }
 
     public function reinit(){
@@ -111,6 +123,9 @@ class ControleurVisiteur {
         $usrname=$_POST['login']; 
         $pwd=$_POST['mdp'];
         $vues_erreur=Validation::val_connexion($usrname,$pwd,$vues_erreur);
+        if(!empty($vues_erreur)){
+            require($rep.$vues['connection']);
+        }
         $model= new VisiteurModel();
         if($model->existUser($usrname)){
             if(password_verify($pwd,$model->getHashedPassword($usrname))){
@@ -119,26 +134,34 @@ class ControleurVisiteur {
                 $this->reinit();
             }
             else{
-                echo 'mauvais passwd verify';
-                $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
-                require($rep.$vues['erreur']);
+                $vues_erreur =array('username'=>$usrname,'password'=>$pwd);
+                require($rep.$vues['connection']);
             }
         }
         else{
-            echo 'mauvais user';
-            $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
-            require($rep.$vues['erreur']);
+            $vues_erreur =array('username'=>$usrname,'password'=>$pwd);
+            require($rep.$vues['connection']);
         }
     }
 
     public function inscription(array $vues_erreur){
         global $rep,$vues,$dataView;
-        $vues_erreur=Validation::val_inscription($vues_erreur);
-        if($vues_erreur == []){
-            $hash= password_hash($pwd,PASSWORD_DEFAULT);
-            $model = new VisiteurModel();
-            $model->inscription($_POST['username'],$hash);
+        $usrname=$_POST['username']; 
+        $pwd=$_POST['password'];
+        $confirm=$_POST['confirmpassword'];
+        $model = new VisiteurModel();
+        $vues_erreur=Validation::val_inscription($usrname,$pwd,$confirm,$vues_erreur);
+        if($model->existUser($usrname)){
+            $vues_erreur[]="Username already taken";
         }
+        if(empty($vues_erreur)){
+            $hash= password_hash($pwd,PASSWORD_DEFAULT);
+            $model->inscription($usrname,$hash);
+        }
+        else{
+            require($rep.$vues['inscription']);
+        }
+        
         $_REQUEST['action']=null;
         new ControleurVisiteur();
     }

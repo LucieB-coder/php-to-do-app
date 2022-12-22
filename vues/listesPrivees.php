@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <header>
-        <h2>Private Lists</h2>
-        <form method="POST" name="goBackHome" id="Go Home">
-            <input type="submit" value="Home Page"/>
-            <input type="hidden" name="action" value="goHome"/>
-        </form>
-    </header>
+    <head>
+        <title>Acceuil</title>
+        <link rel="stylesheet" href="styles/commonStyles.css"/>
+        <link rel="stylesheet" href="styles/acceuilStyles.css"/>
+        <link rel="stylesheet" href="styles/privateListsStyles.css"/>
+    </head>
     <body>
-        <div>
+        <header>
+            <form method="POST" name="goBackHome" id="GoHome"> 
+                <input type="image" src="assets/logo.png"/>
+                <input type="hidden" name="action" value="goHome"/>
+            </form>
+            <h1>Private lists</h1>
+        </header>
+        <div class="body">
             
             <?php
-            if(isset($dataView)) {
+            if(isset($dataView) && !empty($dataView)) {
                 foreach ($dataView as $liste){
                     echo '
                     <div>
                         <form method="post" name="accessList" id="accessList">
-                            <p>• '.$liste->nom.'
-                            <input type="submit" value="View List"/></p>
+                            <h4>• '.$liste->get_nom().'</h4>
+                            <input class="button" type="submit" value="View List"/>
                             <input type="hidden" name="action" value="accessListInfos"/>
-                            <input type="hidden" name="liste" value="'.$liste->id.'"/>
+                            <input type="hidden" name="liste" value="'.$liste->get_id().'"/>
                         </form>
                     </div>';
                 }
             }
+            else{
+                echo '
+                <h2>You do not have any list for the moment</h2>';
+            }
             ?>
-
+            <form method="post" name="createList" id="createList">
+                <input class="create-list" type="submit" value="Create List"/>
+                <input type="hidden" name="action" value="accessCreationListePage"/>
+            </form>
         </div>
     </body>
 </html>

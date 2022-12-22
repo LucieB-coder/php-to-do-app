@@ -1,63 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <header>
-        <h2><?=$dataView->nom?></h2>
-        <form method="POST" name="goBackHome" id="Go Home">
-            <input type="submit" value="Home Page"/>
-            <input type="hidden" name="action" value="goHome"/>
-        </form>
-    </header>
+    <head>
+        <title>detailList</title>
+        <link rel="stylesheet" href="styles/commonStyles.css"/>
+        <link rel="stylesheet" href="styles/detailsListStyles.css"/>
+    </head>
     <body>
-        <div>
+        <header>
+            <form method="POST" name="goBackHome" id="GoHome"> 
+                <input type="image" src="assets/logo.png"/>
+                <input type="hidden" name="action" value="goHome"/>
+            </form>
+            <h1><?=$dataView->get_nom()?></h1>
+        </header>
+        <div class="body">
             <?php 
                 if (isset($dataView)) {
-                    if($dataView->taches != null){
-                        foreach($dataView->taches as $tache){
-                            if($tache->isCompleted == true){
+                    if($dataView->get_taches() != null){
+                        foreach($dataView->get_taches() as $tache){
+                            if($tache->get_isCompleted() == true){
                                 echo '
-                                <input type="checkbox" id="tache'.$tache->id.'" name="tache'.$tache->id.'" value="'.$tache->id.'" disabled checked>
-                                <label for="tache'.$tache->id.'">'.$tache->nom.'</label>
-                                <form method="POST" id="check'.$tache->id.'" name="check'.$tache->id.'">
-                                    <input type="submit" value="Undo"/>
-                                    <input type="hidden" name="action" value="changeCompletedTache"/>
-                                    <input type="hidden" name="tache" value="'.$tache->id.'"/>
-                                    <input type="hidden" name="liste" value="'.$dataView->id.'"/>
-                                </form>
+                                <div class="tache">
+                                    <form method="POST" id="check" name="check">
+                                        <input type="image" src="assets/done.png"/>
+                                        <input type="hidden" name="action" value="changeCompletedTache"/>
+                                        <input type="hidden" name="tache" value="'.$tache->get_id().'"/>
+                                        <input type="hidden" name="liste" value="'.$dataView->get_id().'"/>
+                                    </form>
+                                    <h4>'.$tache->get_nom().'</h4>
+                                
                                 ';
                             }
                             else{
                                 echo '
-                                <input type="checkbox" id="tache'.$tache->id.'" name="tache'.$tache->id.'" value="'.$tache->id.'" disabled>
-                                <label for="tache'.$tache->id.'">'.$tache->nom.'</label>
-                                <form method="POST" id="uncheck'.$tache->id.'" name="uncheck'.$tache->id.'">
-                                    <input type="submit" value="Done"/>
-                                    <input type="hidden" name="action" value="changeCompletedTache"/>
-                                    <input type="hidden" name="tache" value="'.$tache->id.'"/>
-                                    <input type="hidden" name="liste" value="'.$dataView->id.'"/>
-                                </form>
+                                <div class="tache">
+                                    <form method="POST" id="uncheck" name="uncheck">
+                                        <input type="image" src="assets/to-do.png"/>
+                                        <input type="hidden" name="action" value="changeCompletedTache"/>
+                                        <input type="hidden" name="tache" value="'.$tache->get_id().'"/>
+                                        <input type="hidden" name="liste" value="'.$dataView->get_id().'"/>
+                                    </form>
+                                    <h4>'.$tache->get_nom().'</h4>
                                 ';
                             }
                             echo '
-                            <form method="POST" id="delTache'.$tache->id.'" name="delTache'.$tache->id.'">
-                                <input type="submit" value="Delete"/>
+                            <form method="POST" id="delTache" name="delTache">
+                                <input type="image" src="assets/bin.png"/>
                                 <input type="hidden" name="action" value="delTache"/>
-                                <input type="hidden" name="tache" value="'.$tache->id.'"/>
-                                <input type="hidden" name="liste" value="'.$dataView->id.'"/>
-                            </form>';
+                                <input type="hidden" name="tache" value="'.$tache->get_id().'"/>
+                                <input type="hidden" name="liste" value="'.$dataView->get_id().'"/>
+                            </form>
+                            </div>';
                             echo '<br/>';
                         }
                     }
                 }
             ?>
             <form method="POST" id="addTache" name="addTache">
-                <input type="submit" value="Add a Task"/></p>
+                <input class="add-task" type="submit" value="Add a Task"/></p>
                 <input type="hidden" name="action" value="accessCreationTachePage"/>
-                <input type="hidden" name="liste" value="<?=$dataView->id?>"/>
+                <input type="hidden" name="liste" value="<?=$dataView->get_id()?>"/>
             </form>
             <form method="POST" id="delListe" name="delListe">
-                <input type="submit" value="Delete the list"/></p>
+                <input class="del-list" type="submit" value="Delete the list"/></p>
                 <input type="hidden" name="action" value="delListe"/>
-                <input type="hidden" name="liste" value="<?=$dataView->id?>"/>
+                <input type="hidden" name="liste" value="<?=$dataView->get_id()?>"/>
             </form>
         </div>
     </body>

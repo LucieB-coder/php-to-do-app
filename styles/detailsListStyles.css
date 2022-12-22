@@ -1,0 +1,61 @@
+header{
+    place-content: start center;
+}
+
+h1{
+    margin-left: 5%;
+}
+
+#delTache > input[type='image']{
+    height: 50px;
+    width: 50px;
+}
+
+#check >  input[type='image']{
+    height: 50px;
+    width: 50px;
+}
+
+#uncheck >  input[type='image']{
+    height: 50px;
+    width: 50px;
+}
+
+.tache{
+    color: #212F3D;
+    background-color: #E4F8FF;
+    margin: 2%;
+    padding: 3%;
+    border-radius: 30px;
+    display: flex;
+    place-content: end space-between;
+}
+
+.add-task{
+    margin-top: 2%;
+    background: none;
+    border:none;
+    color: #212F3D;
+    background-color: #F7F9F9;
+    font-family: sans-serif;
+    font-size: 25;
+    padding : 40px;
+    border-radius: 50px;
+    margin-left: 25%;
+    width: 50%;
+}
+
+.del-list{
+    margin-top: 2%;
+    background: none;
+    border:none;
+    color: #212F3D;
+    background-color: #F7F9F9;
+    font-family: sans-serif;
+    font-size: 25;
+    padding : 25px;
+    border-radius: 50px;
+    margin-left: 35%;
+    width: 30%;
+}
+

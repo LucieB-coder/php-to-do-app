@@ -40,7 +40,7 @@ class Autoload
         $filename = $class.'.php';
         $dir = array('./','config/','controleurs/','modeles/Gateways/','modeles/Métier/','modeles/Modele/');
         foreach ($dir as $d){
-            $file=$rep.$d.$filename; 
+            $file=$rep.$d.$filename;
             if (file_exists($file))
             {
                 include $file;

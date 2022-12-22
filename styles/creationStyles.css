@@ -1,0 +1,46 @@
+header{
+    place-content: start center;
+}
+
+h1{
+    margin-left: 5%;
+}
+
+.body{
+    align-items: center;
+}
+
+#creationForm{
+    background-color: #E4F8FF;
+    width: 50%;
+    padding: 5%;
+    border-radius: 50px;
+    place-content: start center;
+  }
+
+#creationForm > input[type="text"]{
+    width: 60%;
+    height: 40px;
+    margin-left: 20%;
+    border-radius: 10px;
+    border: 1px solid #212F3D; 
+    margin-bottom: 3%;
+}
+
+label{
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 20;
+    color: #212F3D;
+}
+
+p{
+    margin-left: 5%;
+}
+  
+.button{
+    border-radius: 50px;
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 10%;
+}
