@@ -84,6 +84,7 @@ class ControleurVisiteur {
     public function accessListInfos($arrayErrorViews){
         global $rep,$vues,$dataView;
         $idListe=$_POST['liste'];
+        $arrayErrorViews = Validation::val_id($idListe, $arrayErrorViews);
         $model = new ListeModel();
         $dataView = $model->pullListById($idListe);
         require($rep.$vues['infosListe']);
@@ -91,9 +92,10 @@ class ControleurVisiteur {
 
     public function addTache($arrayErrorViews){
         global $rep,$vues,$dataView;
-        $arrayErrorViews = Validation::val_intitule($arrayErrorViews);
         $nom=$_POST['name'];
         $idListe=$_POST['liste'];
+        $arrayErrorViews = Validation::val_intitule($name, $arrayErrorViews);
+        $arrayErrorViews = Validation::val_id($idListe, $arrayErrorViews);
         $model = new ListeModel();
         $model->addTache($nom,$idListe);
         $_REQUEST['action']="accessListInfos";
@@ -103,6 +105,7 @@ class ControleurVisiteur {
     public function delTache($arrayErrorViews){
         global $rep,$vues,$dataView;
         $idTache=$_POST['tache'];
+        $arrayErrorViews = Validation::val_id($idTache, $arrayErrorViews);
         $model= new ListeModel();
         $model->delTache($idTache);
         $_REQUEST['action']="accessListInfos";
@@ -112,6 +115,7 @@ class ControleurVisiteur {
     public function changeCompletedTache($arrayErrorViews){
         global $rep,$vues,$dataView;
         $idTache=$_POST['tache'];
+        $arrayErrorViews = Validation::val_id($idTache, $arrayErrorViews);
         $model = new ListeModel();
         $model->changeCompletedTache($idTache);
         $_REQUEST['action']="accessListInfos";
@@ -185,6 +189,7 @@ class ControleurVisiteur {
     public function delListe(array $vues_erreur){
         global $rep, $vues;
         $idListe=$_POST['liste'];
+        $arrayErrorViews = Validation::val_id($idListe, $arrayErrorViews);
         $model = new ListeModel();
         $model->delListe($idListe);
         $_REQUEST['action']=null;
