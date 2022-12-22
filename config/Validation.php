@@ -23,48 +23,48 @@
             return $dataVueEreur;
         }
 
-        static function val_inscription($username,$pwd1,$pwd2,$dataVueEreur){
-            if (!isset($username)||$username==="") {
+        static function val_inscription($dataVueEreur){
+            if (!isset($_POST['username'])||$_POST['username']==="") {
                 $dataVueEreur[] ="Nom d'utilisateur manquant";
                 throw new Exception('pas de username');
             }
-            $username = Validation::clear_string($username);
-            if($username == false){
+            $_POST['username'] = Validation::clear_string($_POST['username']);
+            if($_POST['username'] == false){
                 $dataVueEreur[] = "Sanitizing error";
                 throw new Exception('sanitizing fail');
             }
-            if (!isset($pwd1)||$pwd1==="") {
+            if (!isset($_POST['username'])||$_POST['username']==="") {
                 $dataVueEreur[] ="Mot de passe manquant";
                 throw new Exception('pas de password');
             }
-            $pwd1 = Validation::clear_string($pwd1);
-            if($pwd1 == false){
+            $_POST['password'] = Validation::clear_string($_POST['password']);
+            if($_POST['password'] == false){
                 $dataVueEreur[] = "Sanitizing error";
                 throw new Exception('sanitizing fail');
             }
-            if (!isset($pwd2)||$pwd2==="") {
+            if (!isset($_POST['confirmpassword'])||$_POST['confirmpassword']==="") {
                 $dataVueEreur[] ="Confirmation mot de passe manquant";
                 throw new Exception('pas de confirmation password');
             }
-            $pwd2 = Validation::clear_string($pwd2);
-            if($pwd2 == false){
+            $_POST['confirmpassword'] = Validation::clear_string($_POST['confirmpassword']);
+            if($_POST['confirmpassword'] == false){
                 $dataVueEreur[] = "Sanitizing error";
                 throw new Exception('sanitizing fail');
             }
-            if($pwd1 !== $pwd2){
+            if($_POST['password'] !== $_POST['confirmpassword']){
                 $dataVueEreur[]="Mot de passe et confirmation différents";
                 throw new Exception("Mot de passe et confirmation différents");
             }
             return $dataVueEreur;
         }
 
-        static function val_intitule($intitule, $dataVueEreur){
-            if (!isset($intitule)||$intitule==="") {
+        static function val_intitule($dataVueEreur){
+            if (!isset($_POST['name'])||$_POST['name']==="") {
                 $dataVueEreur[] ="Intitulé manquant";
                 throw new Exception('pas d\'intitule');
             }
-            $intitule = Validation::clear_string($intitule);
-            if($intitule == false){
+            $_POST['name'] = Validation::clear_string($_POST['name']);
+            if($_POST['name'] == false){
                 $dataVueEreur[] = "Sanitizing error";
                 throw new Exception('sanitizing fail');
             }

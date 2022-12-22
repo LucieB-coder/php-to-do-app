@@ -3,7 +3,7 @@
 
 <head>
     <title>Acceuil</title>
-    <link rel="stylesheet" href="../vues/styles/commonStyles.css">
+    <link rel="stylesheet" href="<?= $styles['commun'] ?>">
 </head>
 <body>
     <header>

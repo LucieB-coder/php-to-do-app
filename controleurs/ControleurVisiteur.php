@@ -62,7 +62,7 @@ class ControleurVisiteur {
     }
 
     public function reinit(){
-        global $rep,$vues,$dataView;
+        global $rep,$vues,$dataView,$styles;
         $model = new VisiteurModel();
         $dataView = $model->pullPublicLists();
         require($rep.$vues['acceuil']);
@@ -79,6 +79,7 @@ class ControleurVisiteur {
 
     public function addTache($arrayErrorViews){
         global $rep,$vues,$dataView;
+        $arrayErrorViews = Validation::val_intitule($arrayErrorViews);
         $nom=$_POST['name'];
         $idListe=$_POST['liste'];
         $model = new ListeModel();
@@ -118,11 +119,13 @@ class ControleurVisiteur {
                 $this->reinit();
             }
             else{
+                echo 'mauvais passwd verify';
                 $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
                 require($rep.$vues['erreur']);
             }
         }
         else{
+            echo 'mauvais user';
             $arrayErrorViews =array('username'=>$usrname,'password'=>$pwd);
             require($rep.$vues['erreur']);
         }
@@ -130,14 +133,11 @@ class ControleurVisiteur {
 
     public function inscription(array $vues_erreur){
         global $rep,$vues,$dataView;
-        $usrname=$_POST['username']; 
-        $pwd=$_POST['password'];
-        $confirm=$_POST['confirmpassword'];
-        $vues_erreur=Validation::val_inscription($usrname,$pwd,$confirm,$vues_erreur);
+        $vues_erreur=Validation::val_inscription($vues_erreur);
         if($vues_erreur == []){
             $hash= password_hash($pwd,PASSWORD_DEFAULT);
             $model = new VisiteurModel();
-            $model->inscription($usrname,$hash);
+            $model->inscription($_POST['username'],$hash);
         }
         $_REQUEST['action']=null;
         new ControleurVisiteur();

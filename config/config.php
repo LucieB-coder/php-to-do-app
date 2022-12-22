@@ -17,8 +17,8 @@ $vues['creationListe']='vues/creationListe.php';
 $vues['infosListe']='vues/infosListe.php';
 $vues['creationTache']='vues/creationTache.php';
 // Styles
-$styles['commun']='vues/styles/commonStyles.css';
-$styles['connection']='vues/styles/connectionStyle.css';
+$styles['commun']='styles/commonStyles.css';
+$styles['connection']='styles/connectionStyle.css';
 
 // Assets
 $assets['logo']='assets/chekliste.png';
