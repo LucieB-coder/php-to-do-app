@@ -5,16 +5,16 @@
             if (!isset($usrName)||$usrName=="") {
                 $dataVueEreur[] ="Username or password missing";
             }
-            $usrName = Validation::clear_string($usrName);
-            if($usrName == false){
-                $dataVueEreur[] = "Sanitizing error";
+            if ($usrName != Validation::clear_string($usrName)){
+                $dataVueEreur[] = "Forbidden characters";
+                $usrName="";
             }
             if (!isset($mdp)||$mdp=="") {
                 $dataVueEreur[] ="Username or password missing";
             }
-            $mdp = Validation::clear_string($mdp);
-            if($mdp == false){
-                $dataVueEreur[] = "Sanitizing error";
+            if($mdp != Validation::clear_string($mdp)){
+                $dataVueEreur[] = "Forbidden characters";
+                $mdp="";
             }
             return $dataVueEreur;
         }
@@ -23,24 +23,23 @@
             if (!isset($username)||$username==="") {
                 $dataVueEreur[] ="All fields are required";
             }
-            $username = Validation::clear_string($username);
-            if($username == false){
-                $dataVueEreur[] = "Sanitizing error";
-                throw new Exception('sanitizing fail');
+            if($username != Validation::clear_string($username)){
+                $dataVueEreur[] = "Forbidden characters";
+                $username="";
             }
             if (!isset($pwd1)||$pwd1==="") {
                 $dataVueEreur[] ="All fields are required";
             }
-            $pwd1 = Validation::clear_string($pwd1);
-            if($pwd1 == false){
-                $dataVueEreur[] = "Sanitizing error";
+            if($pwd1 != Validation::clear_string($pwd1)){
+                $dataVueEreur[] = "Forbidden characters";
+                $pwd1="";
             }
             if (!isset($pwd2)||$pwd2==="") {
                 $dataVueEreur[] ="All fields are required";
             }
-            $pwd2 = Validation::clear_string($pwd2);
-            if($pwd2 == false){
-                $dataVueEreur[] = "Sanitizing error";
+            if($pwd2 != Validation::clear_string($pwd2)){
+                $dataVueEreur[] = "Forbidden characters";
+                $pwd2="";
             }
             if($pwd1 !== $pwd2){
                 $dataVueEreur[]="Invalid confirmation";
@@ -48,15 +47,24 @@
             return $dataVueEreur;
         }
 
-        static function val_intitule($intitule, $dataVueEreur){
-            if (!isset($intitule)||$intitule==="") {
+        static function val_intitule($name, $dataVueEreur){
+            if (!isset($name)||$name==="") {
                 $dataVueEreur[] ="Intitulé manquant";
-                throw new Exception('pas d\'intitule');
             }
-            $intitule = Validation::clear_string($intitule);
-            if($intitule == false){
-                $dataVueEreur[] = "Sanitizing error";
-                throw new Exception('sanitizing fail');
+            if($name != Validation::clear_string($name)){
+                $dataVueEreur[] = "Forbidden characters";
+                $name="";
+            }
+            return $dataVueEreur;
+        }
+
+        static function val_id($id, $dataVueEreur){
+            if (!isset($id)||$id=""){
+                $dataVueEreur[] = "Id error";
+            }
+            if($id != filter_var($id, FILTER_VALIDATE_INT)){
+                $dataVueEreur[] = "Id validation error";
+                $id = 0;
             }
             return $dataVueEreur;
         }
