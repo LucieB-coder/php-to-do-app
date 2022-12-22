@@ -61,6 +61,7 @@
                 <input type="hidden" name="action" value="accessCreationTachePage"/>
                 <input type="hidden" name="liste" value="<?=$dataView->get_id()?>"/>
             </form>
+            
             <form method="POST" id="delListe" name="delListe">
                 <input class="del-list" type="submit" value="Delete the list"/></p>
                 <input type="hidden" name="action" value="delListe"/>

@@ -20,7 +20,7 @@
                 <h4>Password</h4>
                 <input type="password" name="mdp" required/>
                 <?php
-                if(isset($vues_erreur)){
+                if(!empty($vues_erreur)){
                     echo '<h4 id="error">Incorrect Username or Password</h4>';
                 }
                 ?>

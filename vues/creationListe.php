@@ -28,7 +28,7 @@
                 ?>
                 <br/>
                 <?php
-                if(isset($vues_erreur)){
+                if(!empty($vues_erreur)){
                     echo '<h4 id="error">'.$vues_erreur[0].'</h4>';
                 }
                 ?>

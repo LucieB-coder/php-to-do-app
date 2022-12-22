@@ -23,7 +23,7 @@
                 <h4>Confirm Password</h4>
                 <input type="password" name="confirmpassword" required/>
                 <?php
-                if(isset($vues_erreur)){
+                if(!empty($vues_erreur)){
                     echo '<h4 id="error">'.$vues_erreur[0].'</h4>';
                 }
                 ?>

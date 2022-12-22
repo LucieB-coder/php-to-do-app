@@ -4,7 +4,7 @@ class ControleurVisiteur {
     
     public function __construct() {
         global $rep,$vues,$dataView,$styles,$assets;
-        $arrayErrorViews= array();
+        $vues_erreur= array();
         try{
             $action = $_REQUEST['action']??null;
             switch($action){
@@ -28,33 +28,33 @@ class ControleurVisiteur {
                     require($rep.$vues['creationTache']);
                     break;
                 case "addTache":
-                    $this->addTache($arrayErrorViews);
+                    $this->addTache($vues_erreur);
                     break;
                 case "accessListInfos":
-                    $this->accessListInfos($arrayErrorViews);
+                    $this->accessListInfos($vues_erreur);
                     break;
                 case "delTache":
-                    $this->delTache($arrayErrorViews);
+                    $this->delTache($vues_erreur);
                     break;
                 case "changeCompletedTache":
-                    $this->changeCompletedTache($arrayErrorViews);
+                    $this->changeCompletedTache($vues_erreur);
                     break;
                 case "connection":
-                    $this->connection($arrayErrorViews);
+                    $this->connection($vues_erreur);
                     break;
                 case "inscription":
-                    $this->inscription($arrayErrorViews);
+                    $this->inscription($vues_erreur);
                 case "creerListe":
-                    $this->creerListe($arrayErrorViews);
+                    $this->creerListe($vues_erreur);
                     break;
                 case "delListe":
-                    $this->delListe($arrayErrorViews);
+                    $this->delListe($vues_erreur);
                     break;
                 case "deconnection":
-                    $this->deconnection($arrayErrorViews);
+                    $this->deconnection($vues_erreur);
                     break;
                 default :
-                    $arrayErrorViews[]="Erreur innatendue !!!";
+                    $vues_erreur[]="Erreur innatendue !!!";
                     require($rep.$vues['acceuil']);
             }
         } catch(PDOException $e){
@@ -65,12 +65,13 @@ class ControleurVisiteur {
     }
 
 
-    function deconnection($arrayErrorViews){
+    function deconnection($vues_erreur){
         global $rep, $vues, $dataView;
         $model = new UserModel();
         $retour = $model->deconnection();
         $_REQUEST['action']=null;
         $control= new ControleurVisiteur();
+        $vues_erreur= array();
     }
 
     public function reinit(){
@@ -78,49 +79,54 @@ class ControleurVisiteur {
         $model = new ListeModel();
         $dataView = $model->pullPublicLists();
         require($rep.$vues['acceuil']);
-
+        $vues_erreur= array();
     }
 
-    public function accessListInfos($arrayErrorViews){
+    public function accessListInfos($vues_erreur){
         global $rep,$vues,$dataView;
         $idListe=$_POST['liste'];
-        $arrayErrorViews = Validation::val_id($idListe, $arrayErrorViews);
         $model = new ListeModel();
         $dataView = $model->pullListById($idListe);
         require($rep.$vues['infosListe']);
+        $vues_erreur= array();
     }
 
-    public function addTache($arrayErrorViews){
+    public function addTache($vues_erreur){
         global $rep,$vues,$dataView;
         $nom=$_POST['name'];
         $idListe=$_POST['liste'];
-        $arrayErrorViews = Validation::val_intitule($name, $arrayErrorViews);
-        $arrayErrorViews = Validation::val_id($idListe, $arrayErrorViews);
-        $model = new TacheModel();
-        $model->addTache($nom,$idListe);
-        $_REQUEST['action']="accessListInfos";
-        $this->accessListInfos($arrayErrorViews);
+        $vues_erreur = Validation::val_intitule($nom, $vues_erreur);
+        if(!empty($vues_erreur)){
+            require($rep.$vues['creationTache']);
+        }
+        else{
+            $model = new TacheModel();
+            $model->addTache($nom,$idListe);
+            $_REQUEST['action']="accessListInfos";
+            $this->accessListInfos($vues_erreur);
+            $vues_erreur= array();
+        }
+        
     }
 
-    public function delTache($arrayErrorViews){
+    public function delTache($vues_erreur){
         global $rep,$vues,$dataView;
         $idTache=$_POST['tache'];
-
-        $arrayErrorViews = Validation::val_id($idTache, $arrayErrorViews);
         $model= new TacheModel();
         $model->delTache($idTache);
         $_REQUEST['action']="accessListInfos";
-        $this->accessListInfos($arrayErrorViews);
+        $this->accessListInfos($vues_erreur);
+        $vues_erreur= array();
     }
 
-    public function changeCompletedTache($arrayErrorViews){
+    public function changeCompletedTache($vues_erreur){
         global $rep,$vues,$dataView;
         $idTache=$_POST['tache'];
-        $arrayErrorViews = Validation::val_id($idTache, $arrayErrorViews);
         $model = new TacheModel();
         $model->changeCompletedTache($idTache);
         $_REQUEST['action']="accessListInfos";
-        $this->accessListInfos($arrayErrorViews);
+        $this->accessListInfos($vues_erreur);
+        $vues_erreur= array();
     }
 
     public function connection(array $vues_erreur){
@@ -137,6 +143,7 @@ class ControleurVisiteur {
                 $model->connexion($usrname);
                 $_REQUEST['action']=null;
                 $this->reinit();
+                $vues_erreur= array();
             }
             else{
                 $vues_erreur =array('username'=>$usrname,'password'=>$pwd);
@@ -162,6 +169,7 @@ class ControleurVisiteur {
         if(empty($vues_erreur)){
             $hash= password_hash($pwd,PASSWORD_DEFAULT);
             $model->inscription($usrname,$hash);
+            $vues_erreur= array();
         }
         else{
             require($rep.$vues['inscription']);
@@ -175,26 +183,33 @@ class ControleurVisiteur {
         global $rep, $vues;
         $nom=$_POST['name'];
         $vues_erreur=Validation::val_intitule($nom, $vues_erreur);
-        $model = new ListeModel();
-        if(isset($_SESSION['login'])){
-            $private=$_POST['private'];
-            $model->creerListe($nom,$private);
+        if(!empty($vues_erreur)){
+            require($rep.$vues['creationListe']);
         }
         else{
-            $model->creerListe($nom,null);
+            $model = new ListeModel();
+            if(isset($_SESSION['login'])){
+                $private=$_POST['private'];
+                $model->creerListe($nom,$private);
+            }
+            else{
+                $model->creerListe($nom,null);
+            }
+            $_REQUEST['action']=null;
+            $this->reinit();
+            $vues_erreur= array();
         }
-        $_REQUEST['action']=null;
-        $this->reinit();
+        
     }
 
     public function delListe(array $vues_erreur){
         global $rep, $vues;
         $idListe=$_POST['liste'];
-        $arrayErrorViews = Validation::val_id($idListe, $arrayErrorViews);
         $model = new ListeModel();
         $model->delListe($idListe);
         $_REQUEST['action']=null;
-        $this->reinit();      
+        $this->reinit();  
+        $vues_erreur= array();
     }
 }
 

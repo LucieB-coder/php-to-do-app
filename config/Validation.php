@@ -58,17 +58,6 @@
             return $dataVueEreur;
         }
 
-        static function val_id($id, $dataVueEreur){
-            if (!isset($id)||$id=""){
-                $dataVueEreur[] = "Id error";
-            }
-            if($id != filter_var($id, FILTER_VALIDATE_INT)){
-                $dataVueEreur[] = "Id validation error";
-                $id = 0;
-            }
-            return $dataVueEreur;
-        }
-
         static function clear_string($champ){
             return filter_var($champ, FILTER_SANITIZE_STRING);
         }
